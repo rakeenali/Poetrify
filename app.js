@@ -19,10 +19,10 @@ mongoose
   .then(() => console.log("Db connected"))
   .catch(err => console.log(err));
 
-app.use(
-  "/public/images",
-  express.static(path.join(`${__dirname}/public/images`))
-);
+// app.use(
+//   "/public/images",
+//   express.static(path.join(`${__dirname}/public/images`))
+// );
 
 app.use(express.urlencoded());
 app.use(express.json());
