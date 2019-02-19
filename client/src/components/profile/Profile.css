@@ -1,0 +1,96 @@
+.profile {
+  margin-top: -1rem;
+  height: 100%;
+  width: 100%;
+}
+
+.profile--img {
+  height: 50vh;
+  width: 100%;
+}
+
+.profile__nav {
+  width: 100%;
+  height: 10vh;
+  background-color: #cccccc29;
+  margin-bottom: 1.4rem;
+}
+
+.profile__column {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+}
+
+.profile__avatar {
+  height: 10vh;
+}
+
+.profile__sections {
+  padding: 3px;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-around;
+}
+
+.profile__item {
+  width: 10vw;
+  margin-left: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 10vh;
+  transition: all 0.3s;
+}
+
+.profile__item:hover {
+  cursor: pointer;
+  border-bottom: 4px solid #c98585;
+}
+
+.profile__item--current {
+  background-color: #8787875c;
+  border-bottom: 4px solid #c98585;
+  transform: translateY(-3px);
+}
+
+.profile__item span {
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: block;
+  height: 5vh;
+}
+
+.profile__button {
+  align-self: center;
+}
+
+
+.poem__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.poem__header--items {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.poem__footer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.profile__follow--img {
+  height: 18vh;
+  width: 100%;
+  padding: 3px;
+}
+
+.profile__follow--button {
+  width: 100%;
+}
+
+.profile__follow--text {
+  font-size: 1.5rem;
+}
