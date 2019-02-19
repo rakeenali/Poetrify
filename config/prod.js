@@ -3,6 +3,5 @@ module.exports = {
   emailSecret: process.env.EMAIL_SECRET,
   tokenSecret: process.env.TOKEN_SECRET,
   nodeMailerUser: process.env.MAILER_USER,
-  nodeMailerPassword: process.env.MAILER_PASSWORD,
-  unauthorized: process.env.MAILER_CONDITION
+  nodeMailerPassword: process.env.MAILER_PASSWORD
 };
