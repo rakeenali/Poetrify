@@ -33,12 +33,6 @@ const upload = multer({
   fileFilter
 });
 
-router.get("", (req, res) => {
-  const origin = req.get("host");
-
-  console.log(origin);
-});
-
 // @route   GET api/image/profile
 // @desc    CURRENT PROFILE IMAGE OF A USER
 // @access  GET
@@ -73,8 +67,6 @@ router.post(
     try {
       const errors = {};
       if (req.file) {
-        console.log(req.file);
-
         const profile = await Profile.findOneAndUpdate(
           { user: req.user._id },
           {
