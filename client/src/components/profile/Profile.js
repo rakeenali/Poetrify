@@ -18,7 +18,7 @@ import Following from "../follow/Following";
 import Loading from "../layouts/Loading";
 
 const INITIAL_STATE = {
-  loading: true,
+  loading: false,
   addProfile: false,
   showFollowedBy: false,
   showPoems: true,
@@ -29,6 +29,7 @@ class Profile extends Component {
   state = INITIAL_STATE;
 
   componentDidMount() {
+    this.setState({ loading: true });
     this.props.loggedInProfile();
   }
 

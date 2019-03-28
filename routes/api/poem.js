@@ -25,6 +25,27 @@ router.post("/many", async (req, res) => {
   }
 });
 
+// @route   GET api/poem/ids/queries
+// @desc    Get ids of poems
+// @access  GET
+router.get("/ids", async (req, res) => {
+  try {
+    const poems = await Poem.find({})
+      .sort({ createdAt: -1 })
+      .skip(parseInt(req.query.skip))
+      .limit(parseInt(req.query.limit))
+      .lean()
+      .exec();
+
+    const ids = poems.map(({ _id }) => _id);
+    res.status(200).json({
+      poemIds: ids
+    });
+  } catch (err) {
+    return genError(res, e.message);
+  }
+});
+
 // @route   POST api/poem/:id
 // @desc    Get poem by id
 // @access  GET
@@ -71,11 +92,19 @@ router.post("", authenticate, async (req, res) => {
 
     await poem.save();
 
-    await User.findByIdAndUpdate(req.user._id, {
-      $push: {
-        poems: poem._id
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $push: {
+          poems: poem._id
+        }
+      },
+      {
+        new: true
       }
-    });
+    );
+
+    req.notification.poemNotification(user.followedBy, user.name, poem._id);
 
     return res.status(201).json({
       ...poem._doc,

@@ -15,6 +15,7 @@ import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/register_login";
 import { currentUserInfo } from "./actions/currentUserInfo";
+import { joinNotification } from "./actions/user_notification";
 
 import Navbar from "./components/navbar/Navbar";
 import Register from "./components/registration-login/Register";
@@ -27,12 +28,15 @@ import UpdatePoem from "./components/poems/operations/UpdatePoem";
 import SinglePoem from "./components/poems/poem/SinglePoem";
 import Handle from "./components/handle/Handle";
 import NotFound from "./components/error/NotFound";
+import Notifications from "./components/notifications/Notifications";
+import ListOfPoems from "./components/home/ListOfPoems";
 
 if (localStorage.getItem("poetrify")) {
   const decoded = jwt_decode(localStorage.getItem("poetrify"));
   setAuthToken(localStorage.getItem("poetrify"));
   store.dispatch(setCurrentUser(decoded));
   store.dispatch(currentUserInfo());
+  joinNotification(decoded._id);
 
   const currentTime = Date.now() / 1000;
   if (decoded.exp < currentTime) {
@@ -45,7 +49,6 @@ window.axios = axios;
 
 class App extends Component {
   render() {
-    const { isAuthenticated } = store.getState().CURRENT_USER;
     return (
       <Provider store={store}>
         <Router>
@@ -53,11 +56,8 @@ class App extends Component {
             <Navbar />
             <div id="main-area">
               <Switch>
-                {isAuthenticated ? (
-                  <Redirect exact from="/" to="/profile" />
-                ) : (
-                  <Redirect exact from="/" to="/login" />
-                )}
+                <Redirect exact from="/" to="/poems" />
+                <Route exact path="/poems" component={ListOfPoems} />
                 <Route exact path="/register" component={Register} />
                 <Route
                   exact
@@ -71,6 +71,7 @@ class App extends Component {
                 <Route exact path="/poem/:id" component={SinglePoem} />
                 <Route exact path="/profile" component={Profile} />
                 <Route exact path="/profile/:handle" component={Handle} />
+                <Route exact path="/notifications" component={Notifications} />
                 <Route path="*" component={NotFound} />
               </Switch>
             </div>

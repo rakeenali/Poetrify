@@ -83,7 +83,7 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    const { name, email, password } = req.body;
+    let { name, email, password } = req.body;
 
     const userExist = await User.findOne({ email });
     if (userExist) {
@@ -91,7 +91,17 @@ router.post("/register", async (req, res) => {
       return generateError(res, errors, 409);
     }
 
-    const user = new User({ name, email, password });
+    const salt = await bcrypt.genSalt(10);
+    if (!salt) {
+      throw new Error("User creation error");
+    }
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    if (!hashedPassword) {
+      throw new Error("User creation error");
+    }
+
+    const user = new User({ name, email, password: hashedPassword });
     await user.save();
     const emailToken = await jwt.sign({ _id: user._id }, keys.emailSecret, {
       expiresIn: "1d"

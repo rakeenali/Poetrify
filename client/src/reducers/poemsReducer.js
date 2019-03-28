@@ -5,8 +5,8 @@ import _ from "lodash";
 export default (state = {}, action) => {
   switch (action.type) {
     case SET_POEMS:
-      const poems = _.values(action.payload);
-      return poems;
+      // console.log(action.payload);
+      return action.payload;
 
     case CLEAR_POEMS:
       return {};

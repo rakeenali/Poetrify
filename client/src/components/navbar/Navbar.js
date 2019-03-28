@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 
 import { logout } from "../../actions/register_login";
 
+import NotificationButton from "../notifications/NotificationButton";
+
 import "./Navbar.css";
 
 class Navbar extends React.Component {
@@ -27,17 +29,13 @@ class Navbar extends React.Component {
               </a>
             </li>
           </ul>
-          <ul className="navbar-nav">
+          <ul className="navbar-nav d-flex align-items-center">
             <li className="nav-item">
               <NavLink exact={true} className="nav-link" to="/add-poem">
                 Add Poem
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink exact={true} className="nav-link" to="/profile">
-                Profile
-              </NavLink>
-            </li>
+            <NotificationButton />
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"

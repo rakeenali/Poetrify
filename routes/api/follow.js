@@ -27,7 +27,6 @@ router.post("/:userId", authenticate, async (req, res) => {
         errors.message = "User already followed";
         add = false;
         return genError(res, errors);
-        throw errors;
       }
     });
 
@@ -43,6 +42,8 @@ router.post("/:userId", authenticate, async (req, res) => {
           followedBy: req.user._id
         }
       });
+
+      req.notification.followNotification(userId, req.user._id);
 
       return res.status(200).json({ message: "User followed" });
     } else {

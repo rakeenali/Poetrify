@@ -8,6 +8,7 @@ import poemsReducer from "./poemsReducer";
 import profileReducer from "./profileReducer";
 import usersReducer from "./usersReducer";
 import currentUserInfoReducer from "./currentUserInfoReducer";
+import userNotificationReducer from "./userNotificationReducer";
 
 export default combineReducers({
   CURRENT_USER: currentUserReducer,
@@ -17,5 +18,6 @@ export default combineReducers({
   POEMS: poemsReducer,
   PROFILE: profileReducer,
   USERS: usersReducer,
-  CURRENT_USER_INFO: currentUserInfoReducer
+  CURRENT_USER_INFO: currentUserInfoReducer,
+  USER_NOTIFICATION: userNotificationReducer
 });

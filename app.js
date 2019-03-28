@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const http = require("http");
+const socketIO = require("socket.io");
 
 const keys = require("./config/keys");
 
@@ -11,11 +13,15 @@ const comment = require("./routes/api/comment");
 const like = require("./routes/api/like");
 const follow = require("./routes/api/follow");
 const images = require("./routes/api/images");
+const notification = require("./routes/api/notification");
 
 const app = express();
 
+const server = http.createServer(app);
+const io = socketIO.listen(server);
+
 mongoose
-  .connect(keys.mongoURI)
+  .connect(keys.mongoURI, { useNewUrlParser: true })
   .then(() => console.log("Db connected"))
   .catch(err => console.log(err));
 
@@ -27,6 +33,15 @@ app.use(
 app.use(express.urlencoded());
 app.use(express.json());
 
+// Realtime
+const Notifications = require("./realtime/Notifications");
+const notifications = new Notifications(io);
+
+app.use(function(req, res, next) {
+  req.notification = notifications;
+  next();
+});
+
 app.use("/api/user", user);
 app.use("/api/profile", profile);
 app.use("/api/poem", poem);
@@ -34,6 +49,7 @@ app.use("/api/comment", comment);
 app.use("/api/like", like);
 app.use("/api/follow", follow);
 app.use("/api/image", images);
+app.use("/api/notification", notification);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
@@ -45,4 +61,4 @@ if (process.env.NODE_ENV === "production") {
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+server.listen(port, () => console.log(`Server started on port ${port}`));

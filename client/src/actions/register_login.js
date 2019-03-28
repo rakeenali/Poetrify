@@ -1,6 +1,7 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
 
+import { joinNotification } from "./user_notification";
 import { currentUserInfo, clearCurrentUserInfo } from "./currentUserInfo";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -79,6 +80,7 @@ export const loginUser = (email, password) => async dispatch => {
       window.location.href = "/profile";
 
       currentUserInfo();
+      joinNotification();
 
       dispatch(setCurrentUser(decoded));
     }

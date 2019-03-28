@@ -14,13 +14,27 @@ import Loading from "../../layouts/Loading";
 class ManyPoem extends Component {
   state = {
     showComments: false,
-    loading: true
+    loading: false,
+    poemIds: []
   };
 
   componentDidMount() {
+    this.setState({ loading: true });
     const { poemIds } = this.props;
+    this.setState({ poemIds });
     this.props.getMantPoems(poemIds);
     this.setState({ loading: false });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.poemIds[nextProps.poemIds.length - 1] !==
+      this.state.poemIds[this.state.poemIds.length - 1]
+    ) {
+      const { poemIds } = nextProps;
+      this.setState({ poemIds });
+      nextProps.getMantPoems(poemIds);
+    }
   }
 
   componentWillUnmount() {
@@ -101,6 +115,7 @@ class ManyPoem extends Component {
           )}
         </div>
       );
+      return text;
     });
     return text;
   };
@@ -126,7 +141,7 @@ class ManyPoem extends Component {
       return (
         <div className="col-8">
           <h3>Add a poem</h3>
-          <Link className="btn btn-primary" to="/poem-ad">
+          <Link className="btn btn-primary" to="/add-poem">
             Add Poem
           </Link>
         </div>

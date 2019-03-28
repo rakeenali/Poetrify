@@ -1,0 +1,24 @@
+.notification-item {
+  transition: all 0.5s;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.notification-item:hover {
+  background-color: #f6f6f663;
+  transform: scale(1.01);
+}
+
+.button-notification {
+  background-color: #f1efee;
+  border: 1px solid #000000;
+  transition: all 0.3s;
+}
+
+.button-notification:hover {
+  transform: scale(0.98);
+}
+
+.button-notification:active {
+  transform: scale(0.95);
+}
