@@ -9,10 +9,11 @@ import Loading from "../layouts/Loading";
 
 class FollowedBy extends Component {
   state = {
-    loading: true
+    loading: false
   };
 
   componentDidMount() {
+    this.setState({ loading: true });
     this.props.getUsers(this.props.followedBy);
     this.setState({ loading: false });
   }
@@ -71,7 +72,6 @@ class FollowedBy extends Component {
           </ul>
         </div>
       );
-      return;
     });
     return text;
   };
@@ -163,8 +163,12 @@ class FollowedBy extends Component {
 
     if (this.state.loading) {
       return (
-        <div className="col-lg-8 col-md-8 col-12">
-          <Loading />
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-8 col-md-8 col-12">
+              <Loading />
+            </div>
+          </div>
         </div>
       );
     }

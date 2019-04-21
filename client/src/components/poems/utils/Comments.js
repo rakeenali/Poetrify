@@ -136,7 +136,6 @@ class Comments extends Component {
         </React.Fragment>
       );
     }
-
   }
 }
 

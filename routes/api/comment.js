@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const Poem = require("../../models/Poem");
+const User = require("../../models/User");
 
 const genError = require("../../utils/generateError");
 const validateComment = require("../../validation/poem");
@@ -32,6 +33,12 @@ router.post("/:poemId", authenticate, async (req, res) => {
       },
       { new: true }
     );
+
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: {
+        recomendationRecordIds: poem._id
+      }
+    });
 
     if (!poem) {
       errors.message = "Poem doesnot exist";
@@ -72,6 +79,12 @@ router.delete("/:poemId/:commentId", authenticate, async (req, res) => {
         comments: {
           _id: matchComment._id
         }
+      }
+    });
+
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: {
+        recomendationRecordIds: poem._id
       }
     });
 

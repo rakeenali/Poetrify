@@ -37,12 +37,6 @@ module.exports = class Notification {
       });
   }
 
-  // sendMessage(message, options) {
-  //   this.notifcation
-  //     .to(options.toSocketId)
-  //     .emit("message", `Message from ${options.fromName} ${message}`);
-  // }
-
   async poemNotification(usersId, name, poemId) {
     const obj = {
       message: `${name} has created a new poem`,
@@ -83,11 +77,31 @@ module.exports = class Notification {
       });
 
       const user = await LoggedInUsers.findOne({ userId });
-      this.notifcation
-        .to(user.socketId)
-        .emit("newFollower", { msg: "new follower" });
+      this.notifcation.to(user.socketId).emit("newFollower");
     } catch (err) {
       throw err;
     }
+  }
+
+  async messageNotification(userId) {
+    const user = await LoggedInUsers.findOne({ userId })
+      .lean()
+      .exec();
+
+    if (!user) {
+      const obj = {
+        message: `You recieved a new message`,
+        link: `/messages`
+      };
+
+      await User.findByIdAndUpdate(userId, {
+        $push: {
+          notifications: obj
+        }
+      });
+      return;
+    }
+
+    this.notifcation.to(user.socketId).emit("newMessage");
   }
 };

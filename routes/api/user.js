@@ -7,6 +7,7 @@ const keys = require("../../config/keys");
 const authenticate = require("../../middleware/authenticate");
 const generateError = require("../../utils/generateError");
 const User = require("../../models/User");
+const Conversation = require("../../models/Conversation");
 
 const validateRegister = require("../../validation/register");
 const validateLogin = require("../../validation/login");
@@ -51,7 +52,6 @@ router.get("/current", authenticate, async (req, res) => {
 router.post("/users", async (req, res) => {
   try {
     const { userIds } = req.body;
-    console.log(typeof userIds);
     const users = await User.find({
       _id: { $in: userIds }
     }).populate("profile", "_id handle");
@@ -102,12 +102,14 @@ router.post("/register", async (req, res) => {
     }
 
     const user = new User({ name, email, password: hashedPassword });
+    const conversation = new Conversation({ belongsTo: user._id });
+    await conversation.save();
+    user.conversation = conversation._id;
     await user.save();
     const emailToken = await jwt.sign({ _id: user._id }, keys.emailSecret, {
       expiresIn: "1d"
     });
     const host = req.get("host");
-    console.log(host);
     const url = `http://${host}/confirmation/${emailToken}`;
     transporter.sendMail({
       to: user.email,

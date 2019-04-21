@@ -14,6 +14,8 @@ const like = require("./routes/api/like");
 const follow = require("./routes/api/follow");
 const images = require("./routes/api/images");
 const notification = require("./routes/api/notification");
+const conversation = require("./routes/api/conversation");
+const recomendationRoute = require("./routes/api/recomendation");
 
 const app = express();
 
@@ -37,8 +39,13 @@ app.use(express.json());
 const Notifications = require("./realtime/Notifications");
 const notifications = new Notifications(io);
 
+// Recomendation
+// const Recomendation = require("./recomendation/Recomendation");
+// const recomendation = new Recomendation();
+
 app.use(function(req, res, next) {
   req.notification = notifications;
+  // req.recomendation = recomendation;
   next();
 });
 
@@ -50,6 +57,8 @@ app.use("/api/like", like);
 app.use("/api/follow", follow);
 app.use("/api/image", images);
 app.use("/api/notification", notification);
+app.use("/api/conversation", conversation);
+app.use("/api/recomendation", recomendationRoute);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

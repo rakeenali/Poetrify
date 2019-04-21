@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { logout } from "../../actions/register_login";
 
 import NotificationButton from "../notifications/NotificationButton";
+import MessageButton from "../messages/MessageButton";
 
 import "./Navbar.css";
 
@@ -36,6 +37,7 @@ class Navbar extends React.Component {
               </NavLink>
             </li>
             <NotificationButton />
+            <MessageButton />
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"

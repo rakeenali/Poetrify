@@ -2,3 +2,7 @@
 package-lock.json
 /config/dev.js
 /config/testing.js
+/FakeData
+help.txt
+/public
+public

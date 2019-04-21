@@ -1,26 +1,32 @@
 import React from "react";
-import classnames from "classnames";
+import PropTypes from "prop-types";
+import { Field, ErrorMessage } from "formik";
 
-export default props => {
-  const { type, name, placeholder, value, onChange, label, error } = props;
-
-  const classes = classnames({
-    "form-control": true,
-    "is-invalid is-invalid-custom": error
-  });
-
+const InputForm = props => {
+  const { type, name, placeholder, label } = props;
   return (
     <div className="form-group">
       <label className="form-label--white">{label}</label>
-      <input
+      <Field
         type={type}
         name={name}
-        className={classes}
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
+        className="form-control"
       />
-      {error && <div className="invalid-feedback invalid-custom">{error}</div>}
+      <ErrorMessage name={name}>
+        {msg => {
+          return <span className="text-danger">{msg}</span>;
+        }}
+      </ErrorMessage>
     </div>
   );
 };
+
+InputForm.propTypes = {
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired
+};
+
+export default InputForm;

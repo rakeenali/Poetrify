@@ -6,6 +6,7 @@
   color: inherit;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  position: relative;
 }
 
 .color-transparent {

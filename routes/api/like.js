@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
 const Poem = require("../../models/Poem");
+const User = require("../../models/User");
 
 const genError = require("../../utils/generateError");
 const authenticate = require("../../middleware/authenticate");
@@ -34,6 +35,12 @@ router.post("/:poemId", authenticate, async (req, res) => {
 
     await poem.save();
 
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: {
+        recomendationRecordIds: poem._id
+      }
+    });
+
     return res.status(201).json(poem);
   } catch (e) {
     return genError(res, e.message);
@@ -59,6 +66,12 @@ router.delete("/:poemId", authenticate, async (req, res) => {
       },
       { new: true }
     );
+
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: {
+        recomendationRecordIds: poem._id
+      }
+    });
 
     if (!poem) {
       errors.message = "Poem doesnot exist";

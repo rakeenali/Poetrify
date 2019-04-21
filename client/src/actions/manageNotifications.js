@@ -1,4 +1,4 @@
-import { POEM_NOTIFICATION, SET_ERROR } from "./types";
+import { POEM_NOTIFICATION, SET_ERROR, MESSAGE_NOTIFICATION } from "./types";
 
 import axios from "axios";
 
@@ -28,4 +28,18 @@ export const seenNotification = id => async dispatch => {
       payload: err.response.data
     });
   }
+};
+
+export const newMessageNotfification = () => {
+  return {
+    type: MESSAGE_NOTIFICATION,
+    payload: { newMessage: true }
+  };
+};
+
+export const clearMessageNotification = () => {
+  return {
+    type: MESSAGE_NOTIFICATION,
+    payload: { newMessage: false }
+  };
 };

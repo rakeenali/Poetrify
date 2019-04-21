@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Form, Formik, withFormik } from "formik";
 
 import withoutAuth from "../hoc/withoutAuth";
 import Alert from "../layouts/Alert";
 import InputForm from "../layouts/InputForm";
+import {
+  LoginFormValidation,
+  ResetAccountValidaiton
+} from "./Validation/LoginValidation";
 
 import { loginUser, forgetPassword } from "../../actions/register_login";
 import { clearError } from "../../actions/error";
@@ -11,8 +16,6 @@ import { clearError } from "../../actions/error";
 const initialState = {
   notification: {},
   errors: {},
-  email: "",
-  password: "",
   forgetPasswordState: false
 };
 
@@ -20,8 +23,6 @@ class Login extends Component {
   state = {
     notification: {},
     errors: {},
-    email: "",
-    password: "",
     forgetPasswordState: false
   };
 
@@ -51,23 +52,21 @@ class Login extends Component {
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  onSubmit = e => {
-    e.preventDefault();
-    const { email, password, forgetPasswordState } = this.state;
+  onSubmit = values => {
+    const { forgetPasswordState } = this.state;
     if (forgetPasswordState) {
-      this.props.forgetPassword(email, () =>
+      this.props.forgetPassword(values.email, () =>
         this.setState({ ...initialState })
       );
     } else {
-      this.props.loginUser(email, password);
+      this.props.loginUser(values.email, values.password);
     }
   };
 
   render() {
     const {
       notification,
-      email,
-      password,
+
       errors,
       forgetPasswordState
     } = this.state;
@@ -91,38 +90,41 @@ class Login extends Component {
                   {errors.message && (
                     <Alert type="danger" message={errors.message} />
                   )}
-                  <form onSubmit={this.onSubmit}>
-                    <InputForm
-                      label="Enter Email"
-                      type="email"
-                      name="email"
-                      placeholder="Enter Email"
-                      value={email}
-                      onChange={this.onChange}
-                      error={errors.email}
-                    />
+                  <Formik
+                    initialValues={{ email: "" }}
+                    validationSchema={ResetAccountValidaiton}
+                    onSubmit={this.onSubmit}
+                  >
+                    <Form>
+                      <InputForm
+                        type="email"
+                        name="email"
+                        placeholder="Enter Email"
+                        label="Enter Email"
+                      />
 
-                    <div className="row">
-                      <div className="col-lg-4" />
-                      <div className="col-lg-4">
-                        <button
-                          type="submit"
-                          className="btn btn-outline-dark btn-lg btn-block"
-                        >
-                          Reset Account
-                        </button>
+                      <div className="row">
+                        <div className="col-lg-4" />
+                        <div className="col-lg-4">
+                          <button
+                            type="submit"
+                            className="btn btn-outline-dark btn-lg btn-block"
+                          >
+                            Reset Account
+                          </button>
+                        </div>
+                        <div className="col-lg-4">
+                          <button
+                            type="button"
+                            onClick={() => this.setState({ ...initialState })}
+                            className="btn btn-link btn-lg btn-block"
+                          >
+                            Go back to Login
+                          </button>
+                        </div>
                       </div>
-                      <div className="col-lg-4">
-                        <button
-                          type="button"
-                          onClick={() => this.setState({ ...initialState })}
-                          className="btn btn-link btn-lg btn-block"
-                        >
-                          Go back to Login
-                        </button>
-                      </div>
-                    </div>
-                  </form>
+                    </Form>
+                  </Formik>
                 </div>
               </div>
             </div>
@@ -147,52 +149,55 @@ class Login extends Component {
                 {errors.message && (
                   <Alert type="danger" message={errors.message} />
                 )}
-                <form onSubmit={this.onSubmit}>
-                  <InputForm
-                    type="email"
-                    name="email"
-                    value={email}
-                    placeholder="Enter Email"
-                    label="Enter Email"
-                    onChange={this.onChange}
-                    error={errors.email}
-                  />
-                  <InputForm
-                    type="password"
-                    name="password"
-                    value={password}
-                    placeholder="Enter Password"
-                    label="Enter Password"
-                    onChange={this.onChange}
-                    error={errors.password}
-                  />
+                <Formik
+                  initialValues={{
+                    email: "",
+                    password: ""
+                  }}
+                  onSubmit={this.onSubmit}
+                  validationSchema={LoginFormValidation}
+                >
+                  <Form>
+                    <InputForm
+                      type="email"
+                      name="email"
+                      placeholder="Enter Email"
+                      label="Enter Email"
+                    />
+                    <InputForm
+                      type="password"
+                      name="password"
+                      placeholder="Enter Password"
+                      label="Enter Password"
+                    />
 
-                  <div className="row">
-                    <div className="col-lg-4" />
-                    <div className="col-lg-4">
-                      <button
-                        className="btn btn-outline-dark btn-lg btn-block"
-                        type="submit"
-                      >
-                        Login
-                      </button>
+                    <div className="row">
+                      <div className="col-lg-4" />
+                      <div className="col-lg-4">
+                        <button
+                          className="btn btn-outline-dark btn-lg btn-block"
+                          type="submit"
+                        >
+                          Login
+                        </button>
+                      </div>
+                      <div className="col-lg-4">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            this.setState({
+                              ...initialState,
+                              forgetPasswordState: true
+                            })
+                          }
+                          className="btn btn-link btn-lg btn-block"
+                        >
+                          Forget Password
+                        </button>
+                      </div>
                     </div>
-                    <div className="col-lg-4">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          this.setState({
-                            ...initialState,
-                            forgetPasswordState: true
-                          })
-                        }
-                        className="btn btn-link btn-lg btn-block"
-                      >
-                        Forget Password
-                      </button>
-                    </div>
-                  </div>
-                </form>
+                  </Form>
+                </Formik>
               </div>
             </div>
           </div>

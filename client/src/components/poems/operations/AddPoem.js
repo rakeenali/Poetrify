@@ -1,39 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Formik, Form } from "formik";
 
 import { addPoem } from "../../../actions/poem";
-import { clearError } from "../../../actions/error";
 
 import withAuth from "../../hoc/withAuth";
 
+import { PoemFormValidation } from "./validation/PoemValidation";
 import TextareaForm from "../../layouts/TextareaForm";
 
 class AddPoem extends Component {
-  state = {
-    description: "",
-    errors: {}
-  };
-
-  componentWillReceiveProps(nextProps) {
-    const { error } = nextProps;
-    this.setState({ errors: { ...error } });
-  }
-
-  componentWillUnmount() {
-    this.props.clearError();
-  }
-
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
-
-  onSubmit = e => {
-    e.preventDefault();
-    const { description } = this.state;
-    this.props.addPoem(description, this.props.history);
+  onSubmit = values => {
+    this.props.addPoem(values.description, this.props.history);
   };
 
   render() {
     const { user } = this.props;
-    const { description, errors } = this.state;
     return (
       <div className="container">
         <div className="row">
@@ -43,33 +25,35 @@ class AddPoem extends Component {
               <div className="card-header">
                 <h3 className="text-center">
                   {" "}
-                  Compose poem as: <strong>${user.name}</strong>
+                  Compose poem as: <strong>{user.name}</strong>
                 </h3>
               </div>
               <div className="card-body color-transparent--less">
-                <form onSubmit={this.onSubmit}>
-                  <TextareaForm
-                    name="description"
-                    value={description}
-                    label="About the poem"
-                    placeholder="Poem ..."
-                    onChange={this.onChange}
-                    error={errors.description}
-                  />
-
-                  <div className="row">
-                    <div className="col-lg-4" />
-                    <div className="col-lg-4">
-                      <button
-                        className="btn btn-dark btn-lg btn-block"
-                        type="submit"
-                      >
-                        Add Poem
-                      </button>
+                <Formik
+                  onSubmit={this.onSubmit}
+                  initialValues={{ description: "" }}
+                  validationSchema={PoemFormValidation}
+                >
+                  <Form>
+                    <TextareaForm
+                      name="description"
+                      label="About the poem"
+                      placeholder="Poem ..."
+                    />
+                    <div className="row">
+                      <div className="col-lg-4" />
+                      <div className="col-lg-4">
+                        <button
+                          className="btn btn-dark btn-lg btn-block"
+                          type="submit"
+                        >
+                          Add Poem
+                        </button>
+                      </div>
+                      <div className="col-lg-4" />
                     </div>
-                    <div className="col-lg-4" />
-                  </div>
-                </form>
+                  </Form>
+                </Formik>
               </div>
             </div>
           </div>
@@ -81,12 +65,11 @@ class AddPoem extends Component {
 
 const mapStateToProps = state => {
   return {
-    error: state.ERROR,
     user: state.CURRENT_USER
   };
 };
 
 export default connect(
   mapStateToProps,
-  { addPoem, clearError }
+  { addPoem }
 )(withAuth(AddPoem));

@@ -9,6 +9,7 @@ import profileReducer from "./profileReducer";
 import usersReducer from "./usersReducer";
 import currentUserInfoReducer from "./currentUserInfoReducer";
 import userNotificationReducer from "./userNotificationReducer";
+import userMessagesReducer from "./userMessagesReducer";
 
 export default combineReducers({
   CURRENT_USER: currentUserReducer,
@@ -19,5 +20,6 @@ export default combineReducers({
   PROFILE: profileReducer,
   USERS: usersReducer,
   CURRENT_USER_INFO: currentUserInfoReducer,
-  USER_NOTIFICATION: userNotificationReducer
+  USER_NOTIFICATION: userNotificationReducer,
+  MESSAGES: userMessagesReducer
 });

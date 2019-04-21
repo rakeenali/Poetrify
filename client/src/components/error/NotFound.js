@@ -5,13 +5,13 @@ import "./NotFound.css";
 
 export default function NotFound() {
   return (
-    <div class="wrapper">
+    <div className="wrapper">
       <div>404</div>
-      <div class="txt">
-        Not Found<span class="blink">...</span>
+      <div className="txt">
+        Not Found<span className="blink">...</span>
       </div>
-      <div class="block">
-        <Link to="/" class="btn btn-outline-danger btn-lg">
+      <div className="block">
+        <Link to="/" className="btn btn-outline-danger btn-lg">
           Go To Hompage
         </Link>
       </div>

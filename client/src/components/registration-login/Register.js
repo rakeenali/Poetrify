@@ -1,20 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { Formik, Form } from "formik";
 
 import InputForm from "../layouts/InputForm";
 import Alert from "../layouts/Alert";
+
+import {
+  RegisterFormValidation,
+  ResendTokenValidation
+} from "./Validation/RegisterValidation";
+
 import withoutAuth from "../hoc/withoutAuth";
 
 import { registerUser, resendTokenToEmail } from "../../actions/register_login";
-import { clearError } from "../../actions/error";
+import { clearError, setError } from "../../actions/error";
 
 class Register extends Component {
   state = {
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
     resendToken: false,
     errors: {}
   };
@@ -30,14 +33,15 @@ class Register extends Component {
     this.props.clearError();
   }
 
-  onSubmit = e => {
-    e.preventDefault();
-    const { name, email, password, confirmPassword, resendToken } = this.state;
+  onSubmit = values => {
+    const { resendToken } = this.state;
     if (resendToken) {
-      this.props.resendTokenToEmail(email, this.props.history);
+      this.props.resendTokenToEmail(values.email, this.props.history);
     } else {
-      if (password !== confirmPassword) {
-        this.setState({ errors: { password: "Passwords did not match" } });
+      const { name, email, password, confirmPassword } = values;
+      if (password.trim() !== confirmPassword.trim()) {
+        this.setState({ errors: { message: "Passwords did not match" } });
+        return;
       }
       this.props.registerUser(name, email, password, this.props.history);
     }
@@ -46,14 +50,7 @@ class Register extends Component {
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   render() {
-    const {
-      name,
-      email,
-      password,
-      errors,
-      confirmPassword,
-      resendToken
-    } = this.state;
+    const { errors, resendToken } = this.state;
 
     if (resendToken) {
       return (
@@ -69,47 +66,45 @@ class Register extends Component {
                   {errors.message && (
                     <Alert type="danger" message={errors.message} />
                   )}
-                  <form onSubmit={this.onSubmit}>
-                    <InputForm
-                      label="Enter Email"
-                      type="email"
-                      name="email"
-                      placeholder="Enter Email"
-                      value={email}
-                      onChange={this.onChange}
-                      error={errors.email}
-                    />
-
-                    <div className="row">
-                      <div className="col-lg-4" />
-                      <div className="col-lg-4">
-                        <button
-                          className="btn btn-outline-dark btn-lg btn-block"
-                          type="submit"
-                        >
-                          Resend Token
-                        </button>
+                  <Formik
+                    initialValues={{ email: "" }}
+                    onSubmit={this.onSubmit}
+                    validationSchema={ResendTokenValidation}
+                  >
+                    <Form>
+                      <InputForm
+                        label="Enter Email"
+                        type="email"
+                        name="email"
+                        placeholder="Enter Email"
+                      />
+                      <div className="row">
+                        <div className="col-lg-4" />
+                        <div className="col-lg-4">
+                          <button
+                            className="btn btn-outline-dark btn-lg btn-block"
+                            type="submit"
+                          >
+                            Resend Token
+                          </button>
+                        </div>
+                        <div className="col-lg-4">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              this.setState({
+                                resendToken: false,
+                                errors: {}
+                              })
+                            }
+                            className="btn btn-link btn-lg btn-block"
+                          >
+                            Go Back
+                          </button>
+                        </div>
                       </div>
-                      <div className="col-lg-4">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            this.setState({
-                              name: "",
-                              email: "",
-                              password: "",
-                              confirmPassword: "",
-                              resendToken: false,
-                              errors: {}
-                            })
-                          }
-                          className="btn btn-link btn-lg btn-block"
-                        >
-                          Go Back
-                        </button>
-                      </div>
-                    </div>
-                  </form>
+                    </Form>
+                  </Formik>
                 </div>
               </div>
             </div>
@@ -117,7 +112,6 @@ class Register extends Component {
         </div>
       );
     }
-
     return (
       <div className="container">
         <div className="row">
@@ -131,73 +125,73 @@ class Register extends Component {
                 {errors.message && (
                   <Alert type="danger" message={errors.message} />
                 )}
-                <form onSubmit={this.onSubmit}>
-                  <InputForm
-                    label="Enter Name"
-                    type="text"
-                    name="name"
-                    placeholder="Enter Name"
-                    value={name}
-                    onChange={this.onChange}
-                    error={errors.name}
-                  />
-                  <InputForm
-                    label="Enter Email"
-                    type="email"
-                    name="email"
-                    placeholder="Enter Email"
-                    value={email}
-                    onChange={this.onChange}
-                    error={errors.email}
-                  />
-                  <InputForm
-                    label="Enter Password"
-                    type="password"
-                    placeholder="Enter Password"
-                    value={password}
-                    name="password"
-                    onChange={this.onChange}
-                    error={errors.password}
-                  />
-                  <InputForm
-                    label="Confirm Password"
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    name="confirmPassword"
-                    onChange={this.onChange}
-                  />
+                <Formik
+                  onSubmit={this.onSubmit}
+                  initialValues={{
+                    name: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: ""
+                  }}
+                  validationSchema={RegisterFormValidation}
+                >
+                  <Form>
+                    <InputForm
+                      label="Enter Name"
+                      type="text"
+                      name="name"
+                      placeholder="Enter Name"
+                    />
+                    <InputForm
+                      label="Enter Email"
+                      type="email"
+                      name="email"
+                      placeholder="Enter Email"
+                    />
+                    <InputForm
+                      label="Enter Password"
+                      type="password"
+                      name="password"
+                      placeholder="Enter Password"
+                    />
+                    <InputForm
+                      label="Confirm Password"
+                      type="password"
+                      name="confirmPassword"
+                      placeholder="Confirm Password"
+                    />
 
-                  <div className="row">
-                    <div className="col-lg-4" />
-                    <div className="col-lg-4">
-                      <button
-                        className="btn btn-outline-dark btn-lg btn-block"
-                        type="submit"
-                      >
-                        Register
-                      </button>
+                    <div className="row">
+                      <div className="col-lg-4" />
+                      <div className="col-lg-4">
+                        <button
+                          className="btn btn-outline-dark btn-lg btn-block"
+                          type="submit"
+                        >
+                          Register
+                        </button>
+                      </div>
+                      <div className="col-lg-4">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            this.setState({
+                              name: "",
+                              email: "",
+                              password: "",
+                              confirmPassword: "",
+                              resendToken: true,
+                              errors: {}
+                            })
+                          }
+                          className="btn btn-link btn-lg btn-block"
+                        >
+                          Resend Token
+                        </button>
+                      </div>
                     </div>
-                    <div className="col-lg-4">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          this.setState({
-                            name: "",
-                            email: "",
-                            password: "",
-                            confirmPassword: "",
-                            resendToken: true,
-                            errors: {}
-                          })
-                        }
-                        className="btn btn-link btn-lg btn-block"
-                      >
-                        Resend Token
-                      </button>
-                    </div>
-                  </div>
-                </form>
+                  </Form>
+                </Formik>
               </div>
             </div>
           </div>

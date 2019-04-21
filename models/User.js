@@ -55,31 +55,12 @@ const userSchema = new Schema({
     }
   ],
 
-  notifications: [notificationSchema]
+  recomendationRecordIds: [Schema.Types.ObjectId],
+
+  notifications: [notificationSchema],
+
+  conversation: {
+    type: Schema.Types.ObjectId
+  }
 });
-
-// userSchema.pre("save", async function(next) {
-//   try {
-//     console.log(this.password);
-//     if (!this.password) {
-//       console.log(1);
-//       const salt = await bcrypt.genSalt(10);
-//       if (!salt) {
-//         throw new Error("User creation error");
-//       }
-//       const hashedPassword = await bcrypt.hash(this.password, salt);
-
-//       if (!hashedPassword) {
-//         throw new Error("User creation error");
-//       }
-
-//       this.password = hashedPassword;
-//     }
-//     console.log(2);
-//     next();
-//   } catch (e) {
-//     throw e;
-//   }
-// });
-
 module.exports = mongoose.model("User", userSchema, "User");

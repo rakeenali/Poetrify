@@ -30,18 +30,19 @@ import Handle from "./components/handle/Handle";
 import NotFound from "./components/error/NotFound";
 import Notifications from "./components/notifications/Notifications";
 import ListOfPoems from "./components/home/ListOfPoems";
+import Message from "./components/messages/Message";
 
 if (localStorage.getItem("poetrify")) {
   const decoded = jwt_decode(localStorage.getItem("poetrify"));
-  setAuthToken(localStorage.getItem("poetrify"));
-  store.dispatch(setCurrentUser(decoded));
-  store.dispatch(currentUserInfo());
-  joinNotification(decoded._id);
-
   const currentTime = Date.now() / 1000;
   if (decoded.exp < currentTime) {
     localStorage.removeItem("poetrify");
     window.location.href = "/login";
+  } else {
+    setAuthToken(localStorage.getItem("poetrify"));
+    store.dispatch(setCurrentUser(decoded));
+    store.dispatch(currentUserInfo());
+    joinNotification(decoded._id);
   }
 }
 
@@ -49,6 +50,7 @@ window.axios = axios;
 
 class App extends Component {
   render() {
+    const { isAuthenticated } = store.getState().CURRENT_USER;
     return (
       <Provider store={store}>
         <Router>
@@ -56,7 +58,11 @@ class App extends Component {
             <Navbar />
             <div id="main-area">
               <Switch>
-                <Redirect exact from="/" to="/poems" />
+                {isAuthenticated ? (
+                  <Redirect exact from="/" to="/poems" />
+                ) : (
+                  <Redirect exact from="/" to="/login" />
+                )}
                 <Route exact path="/poems" component={ListOfPoems} />
                 <Route exact path="/register" component={Register} />
                 <Route
@@ -72,6 +78,7 @@ class App extends Component {
                 <Route exact path="/profile" component={Profile} />
                 <Route exact path="/profile/:handle" component={Handle} />
                 <Route exact path="/notifications" component={Notifications} />
+                <Route path="/messages" component={Message} />
                 <Route path="*" component={NotFound} />
               </Switch>
             </div>

@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import isEmpty from "lodash/isEmpty";
+import { Formik, Form } from "formik";
 
 import { getPoemById, updatePoem } from "../../../actions/poem";
-import { clearError } from "../../../actions/error";
 
 import withAuth from "../../hoc/withAuth";
 
@@ -21,26 +20,13 @@ class UpdatePoem extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { error, poem } = nextProps;
-
-    if (!isEmpty(error)) {
-      this.setState({ errors: { ...error } });
-    } else {
-      this.setState({ description: poem.description });
-    }
-  }
-
-  componentWillUnmount() {
-    this.props.clearError();
+    this.setState({ description: nextProps.poem.description });
   }
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  onSubmit = e => {
-    e.preventDefault();
-
-    const { description } = this.state;
-
+  onSubmit = values => {
+    const { description } = values;
     this.props.updatePoem(
       this.props.match.params.id,
       { description },
@@ -50,7 +36,7 @@ class UpdatePoem extends Component {
 
   render() {
     const { user } = this.props;
-    const { description, errors } = this.state;
+    const { description } = this.state;
 
     return (
       <div className="container">
@@ -65,29 +51,32 @@ class UpdatePoem extends Component {
                 </h3>
               </div>
               <div className="card-body color-transparent--less">
-                <form onSubmit={this.onSubmit}>
-                  <TextareaForm
-                    name="description"
-                    value={description}
-                    label="About the poem"
-                    placeholder="Poem ..."
-                    onChange={this.onChange}
-                    error={errors.description}
-                  />
+                <Formik
+                  onSubmit={this.onSubmit}
+                  initialValues={{ description }}
+                  enableReinitialize={true}
+                >
+                  <Form>
+                    <TextareaForm
+                      name="description"
+                      label="About the poem"
+                      placeholder="Poem ..."
+                    />
 
-                  <div className="row">
-                    <div className="col-lg-4" />
-                    <div className="col-lg-4">
-                      <button
-                        className="btn btn-dark btn-lg btn-block"
-                        type="submit"
-                      >
-                        Update Poem
-                      </button>
+                    <div className="row">
+                      <div className="col-lg-4" />
+                      <div className="col-lg-4">
+                        <button
+                          className="btn btn-dark btn-lg btn-block"
+                          type="submit"
+                        >
+                          Update Poem
+                        </button>
+                      </div>
+                      <div className="col-lg-4" />
                     </div>
-                    <div className="col-lg-4" />
-                  </div>
-                </form>
+                  </Form>
+                </Formik>
               </div>
             </div>
           </div>
@@ -99,7 +88,6 @@ class UpdatePoem extends Component {
 
 const mapStateToProps = state => {
   return {
-    error: state.ERROR,
     poem: state.POEM,
     user: state.CURRENT_USER
   };
@@ -107,5 +95,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { getPoemById, updatePoem, clearError }
+  { getPoemById, updatePoem }
 )(withAuth(UpdatePoem));

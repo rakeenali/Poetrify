@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import DatePicker from "react-date-picker";
 import isEmpty from "lodash/isEmpty";
+import { Formik, Form } from "formik";
+import { ProfileFormValidation } from "./utils/validation/ProifleValidaiton";
 
 import { clearError } from "../../actions/error";
 import { loggedInProfile, addProfile } from "../../actions/profile";
@@ -13,10 +14,10 @@ class CreateProfile extends Component {
   state = {
     firstName: "",
     lastName: "",
-    handle: "",
     city: "",
+    handle: "",
+    dateOfBirth: "",
     country: "",
-    dateOfBirth: new Date(),
     isNew: true,
     errors: {}
   };
@@ -56,32 +57,20 @@ class CreateProfile extends Component {
     this.props.clearError();
   }
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
-
-  onSubmit = e => {
-    e.preventDefault();
-
-    const {
-      firstName,
-      lastName,
-      city,
-      country,
-      dateOfBirth,
-      handle,
-      image
-    } = this.state;
+  onSubmit = values => {
+    const { image } = this.state;
 
     if (image && image.size > 3000000) {
-      console.log("if");
       this.setState({
         errors: {
-          image: "Image must be smaller that 3mb"
+          image: "Size of the image must be smaller than 3 MB"
         }
       });
     } else if (image) {
       this.props.addImage(image);
     }
 
+    const { firstName, lastName, city, country, dateOfBirth, handle } = values;
     this.props.addProfile({
       firstName,
       lastName,
@@ -93,16 +82,28 @@ class CreateProfile extends Component {
   };
 
   render() {
-    const {
-      firstName,
-      lastName,
-      city,
-      country,
-      dateOfBirth,
-      errors,
-      handle,
-      isNew
-    } = this.state;
+    const { isNew, errors } = this.state;
+
+    let reInit = false;
+    let values = {
+      firstName: "",
+      lastName: "",
+      handle: "",
+      city: "",
+      country: "",
+      dateOfBirth: new Date()
+    };
+    if (!isNew) {
+      reInit = true;
+      values = {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        handle: this.state.handle,
+        city: this.state.city,
+        country: this.state.country,
+        dateOfBirth: new Date()
+      };
+    }
 
     return (
       <div>
@@ -115,105 +116,91 @@ class CreateProfile extends Component {
                   <h3 className="text-center">Profile Management</h3>
                 </div>
                 <div className="card-body color-transparent--less">
-                  <form onSubmit={this.onSubmit}>
-                    <InputForm
-                      label="Enter First Name"
-                      placeholder="First Name"
-                      name="firstName"
-                      value={firstName}
-                      onChange={this.onChange}
-                      error={errors.firstName}
-                    />
-                    <InputForm
-                      label="Enter Last Name"
-                      placeholder="Last Name"
-                      name="lastName"
-                      value={lastName}
-                      onChange={this.onChange}
-                      error={errors.lastName}
-                    />
-                    <InputForm
-                      label="Enter Your Handle"
-                      placeholder="Handle"
-                      name="handle"
-                      value={handle}
-                      onChange={this.onChange}
-                      error={errors.handle}
-                    />
-                    {isNew ? (
+                  <Formik
+                    onSubmit={this.onSubmit}
+                    initialValues={values}
+                    enableReinitialize={reInit}
+                    validationSchema={!isNew}
+                  >
+                    <Form>
+                      <InputForm
+                        type="text"
+                        label="Enter First Name"
+                        placeholder="First Name"
+                        name="firstName"
+                      />
+                      <InputForm
+                        type="text"
+                        label="Enter Last Name"
+                        placeholder="Last Name"
+                        name="lastName"
+                      />
+                      <InputForm
+                        type="text"
+                        label="Enter Your Handle"
+                        placeholder="Handle"
+                        name="handle"
+                      />
+                      {isNew ? (
+                        <InputForm
+                          type="date"
+                          label="Enter Your Date of birth"
+                          placeholder="Date of birth"
+                          name="dateOfBirth"
+                        />
+                      ) : null}
+                      <InputForm
+                        label="Enter Your Country"
+                        placeholder="Country"
+                        name="country"
+                        type="text"
+                      />
+                      <InputForm
+                        label="Enter Your City"
+                        placeholder="City"
+                        name="city"
+                        type="text"
+                      />
                       <div className="form-group">
                         <label className="form-label--white">
-                          Date Of Birth
+                          Profile Image
                         </label>
-                        <DatePicker
-                          onChange={date =>
-                            this.setState({ dateOfBirth: date })
+                        <input
+                          type="file"
+                          className="form-control-file"
+                          accept="image/jpeg, image/png"
+                          onChange={e =>
+                            this.setState({ image: e.target.files[0] })
                           }
-                          value={dateOfBirth}
-                          className="d-block"
                         />
-                        {errors.dateOfBirth && (
-                          <div className="invalid-feedback invalid-custom">
-                            {errors.dateOfBirth}
-                          </div>
+                        <span className="help-text">
+                          Image must not exceed 3mb and should be of type JPEG,
+                          PNG
+                        </span>
+                        {errors.image && (
+                          <span className="text-danger d-block">
+                            {errors.image}
+                          </span>
                         )}
                       </div>
-                    ) : (
-                      ""
-                    )}
-                    <InputForm
-                      label="Enter Your Country"
-                      placeholder="Country"
-                      name="country"
-                      value={country}
-                      onChange={this.onChange}
-                      error={errors.country}
-                    />
-                    <InputForm
-                      label="Enter Your City"
-                      placeholder="City"
-                      name="city"
-                      value={city}
-                      onChange={this.onChange}
-                      error={errors.city}
-                    />
-                    <div className="form-group">
-                      <label>Profile Image</label>
-                      <input
-                        type="file"
-                        className="form-control-file"
-                        accept="image/jpeg, image/png"
-                        onChange={e =>
-                          this.setState({ image: e.target.files[0] })
-                        }
-                      />
-                      <span className="help-text">
-                        Image must not exceed 3mb and should be of type JPEG,
-                        PNG
-                      </span>
-                      {errors.image && (
-                        <span className="text-danger d-block">
-                          {errors.image}
-                        </span>
-                      )}
-                    </div>
 
-                    <div className="row">
-                      <div className="col-lg-4 col-md-4">
-                        <button className="btn btn-dark btn-lg">
-                          Update Profile
-                        </button>
+                      <div className="row">
+                        <div className="col-lg-4 col-md-4">
+                          <button className="btn btn-dark btn-lg">
+                            Update Profile
+                          </button>
+                        </div>
+                        <div className="col-lg-8 col-md-8 text-right">
+                          <button
+                            className="btn btn-outline-dark"
+                            onClick={e => this.props.changeProfile()}
+                          >
+                            Go Back
+                          </button>
+                        </div>
                       </div>
-                      <div className="col-lg-8 col-md-8 text-right">
-                        <button
-                          className="btn btn-outline-dark"
-                          onClick={e => this.props.changeProfile()}
-                        >
-                          Go Back
-                        </button>
-                      </div>
-                    </div>
-                  </form>
+                    </Form>
+                  </Formik>
                 </div>
               </div>
             </div>

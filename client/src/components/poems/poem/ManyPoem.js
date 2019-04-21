@@ -7,13 +7,13 @@ import Comments from "../utils/Comments";
 import Likes from "../utils/Likes";
 import Dropdown from "../utils/Dropdown";
 
-import { getMantPoems, clearPoems } from "../../../actions/poems";
+import { getManyPoems, clearPoems } from "../../../actions/poems";
 
 import Loading from "../../layouts/Loading";
 
 class ManyPoem extends Component {
   state = {
-    showComments: false,
+    showComments: null,
     loading: false,
     poemIds: []
   };
@@ -22,7 +22,7 @@ class ManyPoem extends Component {
     this.setState({ loading: true });
     const { poemIds } = this.props;
     this.setState({ poemIds });
-    this.props.getMantPoems(poemIds);
+    this.props.getManyPoems(poemIds, this.props.sort);
     this.setState({ loading: false });
   }
 
@@ -33,7 +33,7 @@ class ManyPoem extends Component {
     ) {
       const { poemIds } = nextProps;
       this.setState({ poemIds });
-      nextProps.getMantPoems(poemIds);
+      nextProps.getManyPoems(poemIds, this.props.sort);
     }
   }
 
@@ -44,11 +44,21 @@ class ManyPoem extends Component {
   // Callback
   reRender = () => {
     const { poemIds } = this.props;
-    this.props.getMantPoems(poemIds);
-    this.setState({ showComments: false });
+    this.props.getManyPoems(poemIds, this.props.sort);
+    this.setState({ showComments: null });
   };
 
   // Functions
+  setComment = _id => {
+    if (this.state.showComments === _id) {
+      this.setState({ showComments: null });
+    } else if (this.state.showComments) {
+      this.setState({ showComments: _id });
+    } else {
+      this.setState({ showComments: _id });
+    }
+  };
+
   renderPoems = (poems, isAuthenticated, userId) => {
     const text = [];
     poems.map(poem => {
@@ -92,11 +102,7 @@ class ManyPoem extends Component {
                   update={e => this.reRender()}
                 />
               </React.Fragment>
-              <p
-                onClick={e =>
-                  this.setState({ showComments: !this.state.showComments })
-                }
-              >
+              <p onClick={e => this.setComment(poem._id)}>
                 <span className="btn btn-link"> Comments: </span>
                 <span className="badge badge-primary p-2">
                   {poem.comments.length}
@@ -104,7 +110,7 @@ class ManyPoem extends Component {
               </p>
             </div>
           </div>
-          {this.state.showComments && (
+          {this.state.showComments === poem._id && (
             <Comments
               commentList={poem.comments}
               poemId={poem._id}
@@ -135,6 +141,10 @@ class ManyPoem extends Component {
       return (
         <div className="col-lg-8 col-md-8 col-12 mt-2">
           {this.renderPoems(poems, isAuthenticated, userId)}
+          {this.props.seeMore && (
+            <span onClick={this.props.seeMore}>See More</span>
+          )}
+          {this.props.noSeeMore && <span>Limit Reached</span>}
         </div>
       );
     } else if (isAuthenticated) {
@@ -166,5 +176,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { getMantPoems, clearPoems }
+  { getManyPoems, clearPoems }
 )(ManyPoem);

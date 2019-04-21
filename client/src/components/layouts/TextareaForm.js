@@ -1,27 +1,61 @@
 import React from "react";
-import classnames from "classnames";
+import PropTypes from "prop-types";
+import { Field, ErrorMessage } from "formik";
 
-export default props => {
-  const { type, name, placeholder, value, onChange, label, error } = props;
-
-  const classes = classnames({
-    "form-control": true,
-    "is-invalid is-invalid-custom": error
-  });
-
+const TextAreaForm = props => {
+  const { type, name, placeholder, label } = props;
   return (
-    <div className="mb-3">
+    <div className="my-3">
       <label className="form-label--white">{label}</label>
-      <textarea
-        type={type}
+      <Field
         name={name}
-        className={classes}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        rows="5"
+        render={({ field }) => (
+          <textarea
+            {...field}
+            placeholder={placeholder}
+            type={type}
+            className="form-control"
+            rows="5"
+          />
+        )}
       />
-      {error && <div className="invalid-feedback invalid-custom">{error}</div>}
+      <ErrorMessage name={name}>
+        {msg => {
+          return <span className="text-danger">{msg}</span>;
+        }}
+      </ErrorMessage>
     </div>
   );
 };
+
+TextAreaForm.defaultProps = {
+  type: "text"
+};
+
+TextAreaForm.propTypes = {
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired
+};
+
+export default TextAreaForm;
+// export default props => {
+//   const { type, name, placeholder, value, onChange, label, error } = props;
+
+//   return (
+//     <div className="mb-3">
+//       <label className="form-label--white">{label}</label>
+//       <textarea
+//         type={type}
+//         name={name}
+//         className={classes}
+//         placeholder={placeholder}
+//         value={value}
+//         onChange={onChange}
+//         rows="5"
+//       />
+//       {error && <div className="invalid-feedback invalid-custom">{error}</div>}
+//     </div>
+//   );
+// };

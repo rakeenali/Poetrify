@@ -1,0 +1,50 @@
+.modal__main {
+  width: 90%;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  position: fixed;
+  top: 10vh;
+  left: 5%;
+  z-index: 100;
+  overflow: hidden;
+  padding-bottom: 2rem;
+}
+
+.modal__header {
+  padding: 1rem;
+  background: #5101d1;
+  color: white;
+}
+
+.modal__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.modal__header span {
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.modal__header span:hover {
+  color: #ccc;
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
+.modal__item:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .modal__main {
+    width: 65rem;
+    left: calc((100% - 65rem) / 2);
+  }
+}

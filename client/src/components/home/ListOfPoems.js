@@ -8,27 +8,27 @@ import Loader from "../layouts/Loading";
 class ListOfPoems extends Component {
   static contextType = PoemContext;
   state = {
-    poemIds: []
+    poemIds: [],
+    stop: false
   };
 
   componentDidMount() {
-    this.context.fetchPoems(() => {
-      this.setState({
-        poemIds: this.context.poemIds
-      });
+    this.context.fetchPoems(poemIds => {
+      this.setState({ poemIds });
     });
   }
 
   increaseCount = () => {
-    this.context.fetchPoems(() => {
+    this.context.getIds((poemIds, stop) => {
       this.setState({
-        poemIds: this.context.poemIds
+        poemIds,
+        stop
       });
     });
   };
 
   render() {
-    const { poemIds } = this.state;
+    const { poemIds, stop } = this.state;
 
     if (poemIds.length > 0) {
       return (
@@ -37,8 +37,15 @@ class ListOfPoems extends Component {
             <div className="row">
               <div className="col-lg-2 col-md-2" />
               <>
-                <ManyPoem poemIds={poemIds} />
-                <span onClick={this.increaseCount}>See More</span>
+                {stop ? (
+                  <ManyPoem poemIds={poemIds} noSeeMore={true} sort={true} />
+                ) : (
+                  <ManyPoem
+                    poemIds={poemIds}
+                    seeMore={this.increaseCount}
+                    sort={true}
+                  />
+                )}
               </>
               <div className="col-lg-2 col-md-2" />
             </div>
@@ -54,7 +61,5 @@ class ListOfPoems extends Component {
     );
   }
 }
-
-// ListOfPoems.contextType = PoemContext;
 
 export default ListOfPoems;
