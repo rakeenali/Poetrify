@@ -14,7 +14,7 @@ import {
 import withoutAuth from "../hoc/withoutAuth";
 
 import { registerUser, resendTokenToEmail } from "../../actions/register_login";
-import { clearError, setError } from "../../actions/error";
+import { clearError } from "../../actions/error";
 
 class Register extends Component {
   state = {

@@ -28,7 +28,7 @@ function Likes(props) {
   // define below
   if (isAuthenticated) {
     if (likesList.length > 0) {
-      likesList.map(({ likedBy }) => {
+      likesList.forEach(({ likedBy }) => {
         if (likedBy._id === userId) {
           liked = true;
           return;

@@ -12,7 +12,6 @@ class Confirmation extends Component {
   };
 
   componentDidMount() {
-    console.log(1);
     const { token } = this.props.match.params;
     this.props.confirmUser(token, this.props.history);
   }

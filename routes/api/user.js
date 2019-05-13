@@ -329,22 +329,33 @@ router.post("/reset/:token", async (req, res) => {
 
     const decodedToken = jwt.verify(token, keys.emailSecret);
     if (!decodedToken) {
-      errors.message = "Email not verified";
+      errors.message = "Error occured during verification";
       return generateError(res, errors);
     }
 
     if (decodedToken.exp < Date.now() / 1000) {
-      errors.message = "Email not verified";
+      errors.message = "Error occured during verification";
       return generateError(res, errors);
     }
 
     const user = await User.findById(decodedToken._id);
-    user.password = newPassword;
+
+    const salt = await bcrypt.genSalt(10);
+    if (!salt) {
+      throw new Error("User creation error");
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    if (!hashedPassword) {
+      throw new Error("User creation error");
+    }
+
+    user.password = hashedPassword;
     await user.save();
 
     return res.status(200).json({
       message:
-        "Password Reset Successful You can now login with your new password"
+        "Password reset successful you can now login with your new password"
     });
   } catch (e) {
     return generateError(res, e.message);

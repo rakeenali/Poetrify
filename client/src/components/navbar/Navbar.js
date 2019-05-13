@@ -39,11 +39,9 @@ class Navbar extends React.Component {
             <NotificationButton />
             <MessageButton />
             <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
+              <button
+                className="nav-link dropdown-toggle btn btn-link"
                 id="dropdown-menu"
-                role="button"
                 data-toggle="dropdown"
               />
               <div

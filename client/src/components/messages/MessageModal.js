@@ -43,7 +43,7 @@ class Modal extends Component {
   sendMessage = () => {
     const { messageText } = this.state;
     if (messageText.trim() === "") {
-      this.setState({ error: "Message is required" });
+      this.setState({ error: "Message field is required" });
       return;
     }
     this.props.sendMessage(messageText, this.state.selectedUser._id);

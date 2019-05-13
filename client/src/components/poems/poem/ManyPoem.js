@@ -52,17 +52,14 @@ class ManyPoem extends Component {
   setComment = _id => {
     if (this.state.showComments === _id) {
       this.setState({ showComments: null });
-    } else if (this.state.showComments) {
-      this.setState({ showComments: _id });
     } else {
       this.setState({ showComments: _id });
     }
   };
 
   renderPoems = (poems, isAuthenticated, userId) => {
-    const text = [];
-    poems.map(poem => {
-      text.push(
+    return poems.map(poem => {
+      return (
         <div className="card" key={poem._id}>
           <div className="card-header">
             <div className="poem__header">
@@ -121,9 +118,7 @@ class ManyPoem extends Component {
           )}
         </div>
       );
-      return text;
     });
-    return text;
   };
 
   render() {

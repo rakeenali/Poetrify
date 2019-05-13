@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-export default props => {
+const Alert = props => {
   const { type, message } = props;
   return (
     <div
@@ -19,3 +20,10 @@ export default props => {
     </div>
   );
 };
+
+Alert.propTypes = {
+  type: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired
+};
+
+export default Alert;

@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { SET_ERROR } from "./types";
 
-export const addImage = (image, cb) => async dispatch => {
+export const addImage = (image) => async dispatch => {
   try {
     let data = new FormData();
     data.append("profileImage", image);

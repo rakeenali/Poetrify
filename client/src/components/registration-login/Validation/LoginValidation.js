@@ -7,7 +7,7 @@ export const LoginFormValidation = Yup.object().shape({
   password: Yup.string()
     .min(4, "Password must be longer than 4 characters")
     .max(11, "Password must be smaller than 11 characters")
-    .required("Passowrd field is required")
+    .required("Password field is required")
 });
 
 export const ResetAccountValidaiton = Yup.object().shape({

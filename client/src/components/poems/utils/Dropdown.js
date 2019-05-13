@@ -9,11 +9,9 @@ const Dropdown = props => {
 
   if (isAuthenticated && poem.createdBy._id === userId) {
     return (
-      <div className="dropdown">
-        <a
-          className="dropdown-toggle toggle-custom"
-          href="#"
-          role="button"
+      <div className="dropdown align-self-center">
+        <button
+          className="dropdown-toggle toggle-custom btn btn-link"
           id="poemDropDownMenu"
           data-toggle="dropdown"
         />

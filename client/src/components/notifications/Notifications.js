@@ -50,7 +50,7 @@ class Notifications extends Component {
     const { notifications } = this.props;
 
     if (isEmpty(notifications)) {
-      return <Loading message="loading notificatoins." />;
+      return <Loading message="loading notifications" />;
     }
 
     return (

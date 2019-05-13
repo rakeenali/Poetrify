@@ -14,7 +14,8 @@ import Loading from "../../layouts/Loading";
 
 class SinglePoem extends Component {
   state = {
-    showCommentList: false
+    showCommentList: false,
+    poem: {}
   };
 
   componentDidMount() {
@@ -26,7 +27,9 @@ class SinglePoem extends Component {
     const { error } = nextProps;
     if (error.message) {
       this.props.history.push("/");
+      return;
     }
+    this.setState({ poem: nextProps.poem });
   }
 
   componentWillUnmount() {
@@ -41,8 +44,9 @@ class SinglePoem extends Component {
   };
 
   render() {
-    const { poem, isAuthenticated, userId } = this.props;
+    const { isAuthenticated, userId } = this.props;
     const { showCommentList } = this.state;
+    const { poem } = this.state;
 
     if (isEmpty(poem)) {
       return <Loading message="Loading poem please wailt" />;
@@ -57,7 +61,7 @@ class SinglePoem extends Component {
                 Written By: <strong>{poem.createdBy.name}</strong>
               </h4>
               <div className="d-flex">
-                <span className="text-muted mr-2">
+                <span className="text-muted mr-2 d-block align-self-center">
                   {" "}
                   {moment.parseZone(poem.createdAt).format("DD-MM-YYYY")}
                 </span>

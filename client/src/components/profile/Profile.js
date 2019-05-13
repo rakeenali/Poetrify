@@ -45,8 +45,8 @@ class Profile extends Component {
 
   // custom functions
   reRender = () => {
-    this.props.loggedInProfile();
     this.setState({ ...INITIAL_STATE });
+    this.props.loggedInProfile();
   };
 
   showPoems = () => {
@@ -74,8 +74,11 @@ class Profile extends Component {
   };
 
   changeProfile = () => {
-    this.setState({ addProfile: !this.state.addProfile });
+    this.setState(prevState => ({
+      addProfile: !prevState.addProfile
+    }));
     this.props.loggedInProfile();
+    // this.reRender();
   };
 
   render() {
@@ -95,71 +98,71 @@ class Profile extends Component {
     if (addProfile) {
       return (
         <>
-          <CreateProfile changeProfile={e => this.changeProfile()} />
+          <CreateProfile changeProfile={this.changeProfile} />
         </>
       );
     }
 
-    if (isEmpty(profile)) {
+    if (!isEmpty(profile)) {
       return (
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <h1 className="text-primary display-4">
-                Profile has not been created yet
-              </h1>
-            </div>
-            <div className="col-6 mt-3">
-              <button
-                className="btn btn-outline-success btn-block btn-lg"
-                onClick={this.changeProfile}
-              >
-                Create Profile
-              </button>
+        <React.Fragment>
+          <Showcase
+            image={profile.profileImage}
+            user={profile.user}
+            changeProfile={this.changeProfile}
+            showPoems={this.showPoems}
+            showFollowedBy={this.showFollowedBy}
+            showFollowing={this.showFollowing}
+            currentClass={{
+              showPoems,
+              showFollowedBy,
+              showFollowing
+            }}
+          />
+          <div className="container">
+            <div className="row">
+              <Bio profile={profile} />
+              {showPoems && <ManyPoem poemIds={profile.user.poems} />}
+              {showFollowedBy && (
+                <FollowedBy
+                  isAuthenticated={true}
+                  followedBy={profile.user.followedBy}
+                  following={profile.user.following}
+                  reRender={this.reRender}
+                />
+              )}
+              {showFollowing && (
+                <Following
+                  isAuthenticated={true}
+                  followedBy={profile.user.followedBy}
+                  following={profile.user.following}
+                  reRender={this.reRender}
+                />
+              )}
             </div>
           </div>
-        </div>
+        </React.Fragment>
       );
     }
 
     return (
-      <React.Fragment>
-        <Showcase
-          image={profile.profileImage}
-          user={profile.user}
-          changeProfile={this.changeProfile}
-          showPoems={this.showPoems}
-          showFollowedBy={this.showFollowedBy}
-          showFollowing={this.showFollowing}
-          currentClass={{
-            showPoems,
-            showFollowedBy,
-            showFollowing
-          }}
-        />
-        <div className="container">
-          <div className="row">
-            <Bio profile={profile} />
-            {showPoems && <ManyPoem poemIds={profile.user.poems} />}
-            {showFollowedBy && (
-              <FollowedBy
-                isAuthenticated={true}
-                followedBy={profile.user.followedBy}
-                following={profile.user.following}
-                reRender={this.reRender}
-              />
-            )}
-            {showFollowing && (
-              <Following
-                isAuthenticated={true}
-                followedBy={profile.user.followedBy}
-                following={profile.user.following}
-                reRender={this.reRender}
-              />
-            )}
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <h1 className="text-primary display-4">
+              Profile has not been created yet
+            </h1>
+          </div>
+          <div className="col-6 mt-3">
+            <button
+              className="btn btn-outline-success btn-block btn-lg"
+              onClick={this.changeProfile}
+            >
+              Create Profile
+            </button>
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

@@ -120,7 +120,7 @@ class CreateProfile extends Component {
                     onSubmit={this.onSubmit}
                     initialValues={values}
                     enableReinitialize={reInit}
-                    validationSchema={!isNew}
+                    validationSchema={ProfileFormValidation}
                   >
                     <Form>
                       <InputForm

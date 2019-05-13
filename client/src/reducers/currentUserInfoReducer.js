@@ -4,7 +4,7 @@ export default (state = {}, action) => {
   switch (action.type) {
     case CURRENT_USER_INFO:
       return {
-        ...action.paylaod
+        ...action.payload
       };
 
     case CLEAR_CURRENT_USER_INFO:

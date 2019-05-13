@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Form, Formik, withFormik } from "formik";
+import { Form, Formik } from "formik";
 
 import withoutAuth from "../hoc/withoutAuth";
 import Alert from "../layouts/Alert";

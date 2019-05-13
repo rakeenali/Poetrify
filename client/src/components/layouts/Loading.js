@@ -1,8 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import "./Loading.css";
 
-export default function Loading({ message }) {
+const Loading = ({ message }) => {
   return (
     <div id="main-area">
       <h1>{message}</h1>
@@ -13,8 +14,14 @@ export default function Loading({ message }) {
       </div>
     </div>
   );
-}
+};
 
 Loading.defaultProps = {
   message: "loading"
 };
+
+Loading.propTypes = {
+  message: PropTypes.string.isRequired
+};
+
+export default Loading;

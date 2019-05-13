@@ -26,6 +26,7 @@
     "node-tfidf": "0.0.2",
     "nodemailer": "^5.1.1",
     "socket.io": "^2.2.0",
+    "sticky-session": "^1.1.2",
     "uuid": "^3.3.2",
     "validator": "^10.10.0"
   },

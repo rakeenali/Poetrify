@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const http = require("http");
 const socketIO = require("socket.io");
+// const sticky = require("sticky-session");
 
 const keys = require("./config/keys");
 
@@ -39,13 +40,8 @@ app.use(express.json());
 const Notifications = require("./realtime/Notifications");
 const notifications = new Notifications(io);
 
-// Recomendation
-// const Recomendation = require("./recomendation/Recomendation");
-// const recomendation = new Recomendation();
-
 app.use(function(req, res, next) {
   req.notification = notifications;
-  // req.recomendation = recomendation;
   next();
 });
 

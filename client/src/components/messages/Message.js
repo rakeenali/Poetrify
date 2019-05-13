@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import isEmpty from "lodash/isEmpty";
 import Spinner from "../layouts/Loading";
 import moment from "moment";
+import classnames from "classnames";
 
 import { getMessages } from "../../actions/userMessages";
 
@@ -62,10 +63,17 @@ class Message extends Component {
   };
 
   showUser = () => {
+    const currentRecordId = this.state.currentRecord.with._id;
     return this.state.records.map(record => {
       return (
         <li key={record._id} onClick={e => this.selectCurrentRecord(record)}>
-          <h2>{record.with.name}</h2>
+          <h2
+            className={classnames({
+              "text-danger display-4": currentRecordId === record.with._id
+            })}
+          >
+            {record.with.name}
+          </h2>
         </li>
       );
     });

@@ -7,6 +7,7 @@ import { getPoemById, updatePoem } from "../../../actions/poem";
 import withAuth from "../../hoc/withAuth";
 
 import TextareaForm from "../../layouts/TextareaForm";
+import { PoemFormValidation } from "./validation/PoemValidation";
 
 class UpdatePoem extends Component {
   state = {
@@ -22,8 +23,6 @@ class UpdatePoem extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({ description: nextProps.poem.description });
   }
-
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   onSubmit = values => {
     const { description } = values;
@@ -55,6 +54,7 @@ class UpdatePoem extends Component {
                   onSubmit={this.onSubmit}
                   initialValues={{ description }}
                   enableReinitialize={true}
+                  validationSchema={PoemFormValidation}
                 >
                   <Form>
                     <TextareaForm

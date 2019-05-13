@@ -33,9 +33,8 @@ class FollowedBy extends Component {
 
   // Custom
   renderFollowingMe = (followingMe, isAuthenticated) => {
-    let text = [];
-    followingMe.map(user => {
-      text.push(
+    return followingMe.map(user => {
+      return (
         <div className="profile__follow" key={user._id}>
           <ul className="list-group">
             <li className="list-group-item mt-2">
@@ -73,16 +72,14 @@ class FollowedBy extends Component {
         </div>
       );
     });
-    return text;
   };
 
   renderFollowingMeWithButton(followingMe, follow) {
-    let text = [];
-    followingMe.map(user => {
+    return followingMe.map(user => {
       const result = follow.filter(id => id === user._id);
       if (isEmpty(result)) {
         // show follow button
-        return text.push(
+        return (
           <div className="profile__follow" key={user._id}>
             <ul className="list-group">
               <li className="list-group-item mt-2">
@@ -118,7 +115,7 @@ class FollowedBy extends Component {
           </div>
         );
       }
-      return text.push(
+      return (
         <div className="profile__follow" key={user._id}>
           <ul className="list-group">
             <li className="list-group-item mt-2">
@@ -154,8 +151,6 @@ class FollowedBy extends Component {
         </div>
       );
     });
-
-    return text;
   }
 
   render() {

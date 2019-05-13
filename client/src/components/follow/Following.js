@@ -27,9 +27,8 @@ class Following extends Component {
 
   // Custom renders
   renderImFollowing = (imFollowing, isAuthenticated) => {
-    let text = [];
-    imFollowing.map(user => {
-      text.push(
+    return imFollowing.map(user => {
+      return (
         <div className="profile__follow" key={user._id}>
           <ul className="list-group">
             <li className="list-group-item mt-2">
@@ -67,9 +66,7 @@ class Following extends Component {
           </ul>
         </div>
       );
-      return;
     });
-    return text;
   };
 
   render() {

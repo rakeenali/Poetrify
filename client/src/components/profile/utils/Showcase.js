@@ -31,7 +31,7 @@ export default props => {
     <React.Fragment>
       {image && (
         <div className="profile">
-          <img src={image} className="profile--img" alt="Profile image" />
+          <img src={image} className="profile--img" alt="Your profile" />
         </div>
       )}
       <div className="profile__nav">

@@ -1,16 +1,9 @@
-import React, {
-  Component
-} from "react";
+import React, { Component } from "react";
 import isEmpty from "lodash/isEmpty";
-import {
-  connect
-} from "react-redux";
-import classnames from 'classnames';
+import { connect } from "react-redux";
+import classnames from "classnames";
 
-import {
-  followUser,
-  unFollowUser
-} from "../../actions/follow";
+import { followUser, unFollowUser } from "../../actions/follow";
 
 class Showcase extends Component {
   followUser = userId => {
@@ -28,37 +21,38 @@ class Showcase extends Component {
     }
 
     if (isEmpty(following)) {
-      return ( 
-        <button 
-          className = "btn btn-outline-dark btn-block"
-          onClick = {e => this.followUser(userId)} 
+      return (
+        <button
+          className="btn btn-outline-dark btn-block"
+          onClick={e => this.followUser(userId)}
         >
-          Follow 
+          Follow
         </button>
       );
     }
 
-    following.map(id => {
+    following.forEach(id => {
       if (id === userId) {
         isMatch = true;
       }
     });
     if (isMatch) {
-      return ( 
-        <button className = "btn btn-outline-dark btn-block"
-        onClick = {
-          e => this.unFollowUser(userId)
-        }>
-          Unfollow 
+      return (
+        <button
+          className="btn btn-outline-dark btn-block"
+          onClick={e => this.unFollowUser(userId)}
+        >
+          Unfollow
         </button>
       );
     }
 
-    return ( 
-      <button className = "btn btn-outline-dark btn-block"
-        onClick = {e => this.followUser(userId)} 
+    return (
+      <button
+        className="btn btn-outline-dark btn-block"
+        onClick={e => this.followUser(userId)}
       >
-        Follow 
+        Follow
       </button>
     );
   };
@@ -75,79 +69,62 @@ class Showcase extends Component {
       currentClass
     } = this.props;
     const poemClass = classnames({
-      'profile__item': true,
-      'profile__item--current': currentClass.showPoems
+      profile__item: true,
+      "profile__item--current": currentClass.showPoems
     });
-  
+
     const followersClass = classnames({
-      'profile__item': true,
-      'profile__item--current': currentClass.showFollowedBy
+      profile__item: true,
+      "profile__item--current": currentClass.showFollowedBy
     });
-  
-  
+
     const followingClass = classnames({
-      'profile__item': true,
-      'profile__item--current': currentClass.showFollowing
+      profile__item: true,
+      "profile__item--current": currentClass.showFollowing
     });
 
     return (
-     <React.Fragment>
-        {
-          image && ( 
-            <div className = "profile" >
-              <img 
-                src={image}
-                className = "profile--img"
-                alt = "Profile image" />
-            </div>
-          )
-        }
-      <div className="profile__nav">
-        <div className="profile__column">
-          <div className="profile__avatar"></div>
-          <div className="profile__sections">
-            <div 
-              className={poemClass} 
-              onClick={showPoems}
-            >
-              <span>Poems</span>
-              <span>  {user.poems.length}</span>
-            </div>
-            <div 
-              className={followersClass}
-              onClick={showFollowedBy}
-            >
-              <span>Followers</span>
-              <span>  {user.followedBy.length}</span>
-            </div>
-            <div 
-              className={followingClass}
-              onClick={showFollowing}
-            >
-              <span>Following</span>
-              <span>  {user.following.length}</span>
-            </div>
+      <React.Fragment>
+        {image && (
+          <div className="profile">
+            <img src={image} className="profile--img" alt="Profile of user" />
           </div>
-          <div className="profile__button m-3">
-            {
-              this.followUnFollowButton(
+        )}
+        <div className="profile__nav">
+          <div className="profile__column">
+            <div className="profile__avatar" />
+            <div className="profile__sections">
+              <div className={poemClass} onClick={showPoems}>
+                <span>Poems</span>
+                <span> {user.poems.length}</span>
+              </div>
+              <div className={followersClass} onClick={showFollowedBy}>
+                <span>Followers</span>
+                <span> {user.followedBy.length}</span>
+              </div>
+              <div className={followingClass} onClick={showFollowing}>
+                <span>Following</span>
+                <span> {user.following.length}</span>
+              </div>
+            </div>
+            <div className="profile__button m-3">
+              {this.followUnFollowButton(
                 user.userId,
                 following,
                 isAuthenticated
-              )
-            }
+              )}
+            </div>
           </div>
         </div>
-      </div>
-     </React.Fragment>
+      </React.Fragment>
     );
   }
 }
 
 export default connect(
-  null, {
+  null,
+  {
     followUser,
     unFollowUser
   }
 )(Showcase);
-

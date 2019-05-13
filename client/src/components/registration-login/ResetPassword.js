@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { Formik, Form } from "formik";
 
 import withoutAuth from "../hoc/withoutAuth";
 import { resetPassword } from "../../actions/register_login";
 import InputForm from "../layouts/InputForm";
 import Alert from "../layouts/Alert";
 
+import { ResetPasswordFormValidation } from "./Validation/ResetPasswordValidation";
+
 class ResetPassword extends Component {
   state = {
     token: "",
-    password: "",
-    confirmPassword: "",
     errors: {}
   };
 
@@ -25,12 +26,9 @@ class ResetPassword extends Component {
     this.setState({ errors: { ...error } });
   }
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
-
-  onSubmit = e => {
-    e.preventDefault();
-
-    const { password, confirmPassword, token } = this.state;
+  onSubmit = values => {
+    const { password, confirmPassword } = values;
+    const { token } = this.state;
 
     if (password !== confirmPassword) {
       this.setState({
@@ -43,34 +41,53 @@ class ResetPassword extends Component {
   };
 
   render() {
-    const { token, password, confirmPassword, errors } = this.state;
+    const { token, errors } = this.state;
 
     if (token) {
       return (
         <div className="container">
-          {errors.message && <Alert type="danger" message={errors.message} />}
-          <form onSubmit={this.onSubmit}>
-            <InputForm
-              label="Enter New Password"
-              type="password"
-              name="password"
-              placeholder="Enter new Password"
-              value={password}
-              onChange={this.onChange}
-              error={errors.password}
-            />
-            <InputForm
-              label="Confirm Password"
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Passwrod"
-              value={confirmPassword}
-              onChange={this.onChange}
-            />
-            <button type="submit" className="btn btn-lg btn-outline-info mt-2">
-              Reset Password
-            </button>
-          </form>
+          <div className="row">
+            <div className="col-lg-2" />
+            <div className="col-lg-8">
+              <div className="card bg-primary text-white">
+                <div className="card-header">
+                  <h3 className="text-center">Reset Password</h3>
+                </div>
+                <div className="card-body color-transparent">
+                  {errors.message && (
+                    <Alert type="danger" message={errors.message} />
+                  )}
+                  <Formik
+                    onSubmit={this.onSubmit}
+                    initialValues={{ password: "", confirmPassword: "" }}
+                    validationSchema={ResetPasswordFormValidation}
+                  >
+                    <Form>
+                      <InputForm
+                        label="Enter New Password"
+                        type="password"
+                        name="password"
+                        placeholder="New Password"
+                      />
+                      <InputForm
+                        label="Confirm Password"
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Confirm Passwrod"
+                      />
+                      <button
+                        type="submit"
+                        className="btn btn-lg btn-dark mt-2"
+                      >
+                        Reset Password
+                      </button>
+                    </Form>
+                  </Formik>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-2" />
+          </div>
         </div>
       );
     }

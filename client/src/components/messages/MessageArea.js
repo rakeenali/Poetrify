@@ -15,7 +15,6 @@ import "./MessageArea.css";
 
 const MessageFormValidation = Yup.object().shape({
   messageText: Yup.string()
-    .min(10, "Message Field should contain more than 10 characters")
     .max(500, "Message field should contain less than 500 characters")
     .required("Message Field is required")
 });
@@ -24,7 +23,7 @@ class MessageArea extends Component {
   // Render Functions
   renderMessages = () => {
     const { record, userId } = this.props;
-
+    console.log(record);
     return record.messages.map(message => {
       let mine = false;
       if (message.from.toString() === userId.toString()) {

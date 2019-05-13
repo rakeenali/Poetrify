@@ -7,7 +7,7 @@ export const currentUserInfo = () => async dispatch => {
     const user = await axios.get("/api/user/current");
     dispatch({
       type: CURRENT_USER_INFO,
-      paylaod: user.data
+      payload: user.data
     });
   } catch (err) {
     dispatch({
