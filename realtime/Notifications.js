@@ -104,4 +104,24 @@ module.exports = class Notification {
 
     this.notifcation.to(user.socketId).emit("newMessage");
   }
+
+  async groupNotification(group) {
+    const obj = {
+      message: `A new request from a user to join group ${group.title}`,
+      link: `/group/${group._id}`
+    };
+
+    const user = await User.findByIdAndUpdate(
+      group.admins[0],
+      {
+        $push: {
+          notifications: obj
+        }
+      },
+      { new: true }
+    );
+    console.log(user);
+    console.log("new gropup request");
+    this.notifcation.to(group.admins[0]).emit("newGroupRequest");
+  }
 };

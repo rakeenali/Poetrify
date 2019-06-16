@@ -1,4 +1,4 @@
-import { SET_POEM } from "../actions/types";
+import { SET_POEM, CLEAR_POEM } from "../actions/types";
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -6,6 +6,10 @@ export default (state = {}, action) => {
       return {
         ...action.payload
       };
+
+    case CLEAR_POEM:
+      return {};
+
     default:
       return {};
   }

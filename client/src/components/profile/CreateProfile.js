@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import isEmpty from "lodash/isEmpty";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import { ProfileFormValidation } from "./utils/validation/ProifleValidaiton";
 
 import { clearError } from "../../actions/error";
@@ -107,103 +107,112 @@ class CreateProfile extends Component {
 
     return (
       <div>
-        <div className="container">
+        <div className="container u-lg-space">
           <div className="row">
-            <div className="col-lg-2" />
-            <div className="col-lg-8">
-              <div className="card text-white bg-secondary">
+            <div className="col-lg-1 hide-on-small">&nbsp;</div>
+            <div className="col-lg-10 col-sm-12">
+              <div className="card text-dark bg-light card-shadow">
                 <div className="card-header">
-                  <h3 className="text-center">Profile Management</h3>
+                  <h1 className="text-center">Manage Profile</h1>
                 </div>
-                <div className="card-body color-transparent--less">
-                  <Formik
-                    onSubmit={this.onSubmit}
-                    initialValues={values}
-                    enableReinitialize={reInit}
-                    validationSchema={ProfileFormValidation}
-                  >
-                    <Form>
-                      <InputForm
-                        type="text"
-                        label="Enter First Name"
-                        placeholder="First Name"
-                        name="firstName"
-                      />
-                      <InputForm
-                        type="text"
-                        label="Enter Last Name"
-                        placeholder="Last Name"
-                        name="lastName"
-                      />
-                      <InputForm
-                        type="text"
-                        label="Enter Your Handle"
-                        placeholder="Handle"
-                        name="handle"
-                      />
-                      {isNew ? (
-                        <InputForm
-                          type="date"
-                          label="Enter Your Date of birth"
-                          placeholder="Date of birth"
-                          name="dateOfBirth"
+                <div className="card-body">
+                  <div className="form-container">
+                    <Formik
+                      onSubmit={this.onSubmit}
+                      initialValues={values}
+                      enableReinitialize={reInit}
+                      validationSchema={ProfileFormValidation}
+                    >
+                      <Form>
+                        <Field
+                          type="text"
+                          label="Enter First Name"
+                          placeholder="First Name"
+                          name="firstName"
+                          component={InputForm}
                         />
-                      ) : null}
-                      <InputForm
-                        label="Enter Your Country"
-                        placeholder="Country"
-                        name="country"
-                        type="text"
-                      />
-                      <InputForm
-                        label="Enter Your City"
-                        placeholder="City"
-                        name="city"
-                        type="text"
-                      />
-                      <div className="form-group">
-                        <label className="form-label--white">
-                          Profile Image
-                        </label>
-                        <input
-                          type="file"
-                          className="form-control-file"
-                          accept="image/jpeg, image/png"
-                          onChange={e =>
-                            this.setState({ image: e.target.files[0] })
-                          }
+                        <Field
+                          type="text"
+                          label="Enter Last Name"
+                          placeholder="Last Name"
+                          name="lastName"
+                          component={InputForm}
                         />
-                        <span className="help-text">
-                          Image must not exceed 3mb and should be of type JPEG,
-                          PNG
-                        </span>
-                        {errors.image && (
-                          <span className="text-danger d-block">
-                            {errors.image}
+                        <Field
+                          type="text"
+                          label="Enter Your Handle"
+                          placeholder="Handle"
+                          name="handle"
+                          component={InputForm}
+                        />
+                        {isNew ? (
+                          <Field
+                            type="date"
+                            label="Enter Your Date of birth"
+                            placeholder="Date of birth"
+                            name="dateOfBirth"
+                            component={InputForm}
+                          />
+                        ) : null}
+                        <Field
+                          label="Enter Your Country"
+                          placeholder="Country"
+                          name="country"
+                          type="text"
+                          component={InputForm}
+                        />
+                        <Field
+                          label="Enter Your City"
+                          placeholder="City"
+                          name="city"
+                          type="text"
+                          component={InputForm}
+                        />
+                        <div className="form-group mb-4">
+                          <div className="input-group input-group-lg">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text text-input-group">
+                                Choose Image
+                              </span>
+                            </div>
+                            <input
+                              type="file"
+                              className="form-control form-control-input"
+                              accept="image/jpeg, image/png"
+                              onChange={e =>
+                                this.setState({ image: e.target.files[0] })
+                              }
+                            />
+                          </div>
+                          <span className="help-text u-small-label">
+                            {" "}
+                            Image must not exceed 3mb and should be of type
+                            JPEG, PNG
                           </span>
-                        )}
-                      </div>
+                          {errors.image && (
+                            <div className="form-label">{errors.image}</div>
+                          )}
+                        </div>
 
-                      <div className="row">
-                        <div className="col-lg-4 col-md-4">
-                          <button className="btn btn-dark btn-lg">
-                            Update Profile
-                          </button>
-                        </div>
-                        <div className="col-lg-8 col-md-8 text-right">
-                          <button
-                            className="btn btn-outline-dark"
-                            onClick={e => this.props.changeProfile()}
-                          >
-                            Go Back
-                          </button>
-                        </div>
-                      </div>
-                    </Form>
-                  </Formik>
+                        <button
+                          type="submit"
+                          className="btn btn-outline-info btn-lg"
+                        >
+                          Update Profile
+                        </button>
+                        <button
+                          className="btn btn-link btn-lg text-info"
+                          onClick={e => this.props.changeProfile()}
+                        >
+                          Go Back
+                        </button>
+                      </Form>
+                    </Formik>
+                  </div>
                 </div>
               </div>
             </div>
+            <div className="col-lg-1 hide-on-small">&nbsp;</div>
           </div>
         </div>
       </div>

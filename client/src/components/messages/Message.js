@@ -12,6 +12,8 @@ import MessageArea from "./MessageArea";
 import withAuth from "../hoc/withAuth";
 import MessageModal from "./MessageModal";
 
+import NewMessage from "./new-message.png";
+
 class Message extends Component {
   state = {
     records: [],
@@ -66,14 +68,19 @@ class Message extends Component {
     const currentRecordId = this.state.currentRecord.with._id;
     return this.state.records.map(record => {
       return (
-        <li key={record._id} onClick={e => this.selectCurrentRecord(record)}>
-          <h2
-            className={classnames({
-              "text-danger display-4": currentRecordId === record.with._id
-            })}
-          >
-            {record.with.name}
-          </h2>
+        <li
+          key={record._id}
+          className={classnames({
+            "list-group-item list-group-item-custom":
+              currentRecordId !== record.with._id,
+            "list-group-item list-group-item-custom list-group-item-active":
+              currentRecordId === record.with._id
+          })}
+          onClick={e => this.selectCurrentRecord(record)}
+        >
+          <div className="user-list">
+            <h4>{record.with.name}</h4>
+          </div>
         </li>
       );
     });
@@ -92,10 +99,34 @@ class Message extends Component {
       return <Spinner message="loading conversations" />;
     }
 
+    if (isEmpty(records) && messageModal) {
+      return (
+        <MessageModal
+          userIds={this.props.userIds}
+          onCancel={() => this.setState({ messageModal: false })}
+        />
+      );
+    }
+
     if (isEmpty(records)) {
       return (
-        <div>
-          <h3>No conversations to show</h3>
+        <div className="messenger">
+          <div className="left">
+            <div className="top">
+              <h3 className="text-center">Recent Messages</h3>
+              <img
+                src={NewMessage}
+                alt="new message"
+                onClick={e => this.setState({ messageModal: true })}
+              />
+            </div>
+            <div className="bottom">&nbsp;</div>
+          </div>
+          <div className="right">
+            &nbsp;
+            <div className="top">&nbsp;</div>
+            <div className="bottom">&nbsp;</div>
+          </div>
         </div>
       );
     }
@@ -108,7 +139,29 @@ class Message extends Component {
             onCancel={() => this.setState({ messageModal: false })}
           />
         )}
-        <div className="container">
+        <div className="messenger">
+          <div className="left">
+            <div className="top">
+              <h3 className="text-center">Recent Messages</h3>
+              <img
+                src={NewMessage}
+                alt="new message"
+                onClick={e => this.setState({ messageModal: true })}
+              />
+            </div>
+            <div className="bottom">
+              <div className="list-group">{this.showUser()}</div>
+            </div>
+          </div>
+          <div className="right">
+            <MessageArea
+              record={this.state.currentRecord}
+              userId={this.props.currentUserId}
+            />
+          </div>
+          {this.sort()}
+        </div>
+        {/* <div className="container u-lg-space">
           <div className="row">
             <div className="col-lg-3 col-12">
               <button
@@ -127,7 +180,7 @@ class Message extends Component {
             </div>
             {this.sort()}
           </div>
-        </div>
+        </div> */}
       </React.Fragment>
     );
   }

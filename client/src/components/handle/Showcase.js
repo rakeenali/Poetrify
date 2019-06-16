@@ -3,6 +3,8 @@ import isEmpty from "lodash/isEmpty";
 import { connect } from "react-redux";
 import classnames from "classnames";
 
+import getImage from "../../utils/getImage";
+
 import { followUser, unFollowUser } from "../../actions/follow";
 
 class Showcase extends Component {
@@ -22,12 +24,20 @@ class Showcase extends Component {
 
     if (isEmpty(following)) {
       return (
-        <button
-          className="btn btn-outline-dark btn-block"
-          onClick={e => this.followUser(userId)}
-        >
-          Follow
-        </button>
+        <div className="dropdown">
+          <h4 id="widgetactiondropdown" data-toggle="dropdown">
+            &#x02026;
+          </h4>
+          <div className="dropdown-menu" aria-labelledby="widgetactiondropdown">
+            <button
+              className="dropdown-item"
+              onClick={e => this.followUser(userId)}
+              type="button"
+            >
+              Follow
+            </button>
+          </div>
+        </div>
       );
     }
 
@@ -38,22 +48,38 @@ class Showcase extends Component {
     });
     if (isMatch) {
       return (
-        <button
-          className="btn btn-outline-dark btn-block"
-          onClick={e => this.unFollowUser(userId)}
-        >
-          Unfollow
-        </button>
+        <div className="dropdown">
+          <h4 id="widgetactiondropdown" data-toggle="dropdown">
+            &#x02026;
+          </h4>
+          <div className="dropdown-menu" aria-labelledby="widgetactiondropdown">
+            <button
+              className="dropdown-item"
+              onClick={e => this.unFollowUser(userId)}
+              type="button"
+            >
+              Unfollow
+            </button>
+          </div>
+        </div>
       );
     }
 
     return (
-      <button
-        className="btn btn-outline-dark btn-block"
-        onClick={e => this.followUser(userId)}
-      >
-        Follow
-      </button>
+      <div className="dropdown">
+        <h4 id="widgetactiondropdown" data-toggle="dropdown">
+          &#x02026;
+        </h4>
+        <div className="dropdown-menu" aria-labelledby="widgetactiondropdown">
+          <button
+            className="dropdown-item"
+            onClick={e => this.followUser(userId)}
+            type="button"
+          >
+            Follow
+          </button>
+        </div>
+      </div>
     );
   };
 
@@ -69,31 +95,32 @@ class Showcase extends Component {
       currentClass
     } = this.props;
     const poemClass = classnames({
-      profile__item: true,
-      "profile__item--current": currentClass.showPoems
+      active: currentClass.showPoems
     });
 
     const followersClass = classnames({
-      profile__item: true,
-      "profile__item--current": currentClass.showFollowedBy
+      active: currentClass.showFollowedBy
     });
 
     const followingClass = classnames({
-      profile__item: true,
-      "profile__item--current": currentClass.showFollowing
+      active: currentClass.showFollowing
+    });
+
+    const profileClass = classnames({
+      profile: true,
+      "profile group-top-space": !image
     });
 
     return (
-      <React.Fragment>
+      <div className={profileClass}>
         {image && (
-          <div className="profile">
-            <img src={image} className="profile--img" alt="Profile of user" />
+          <div className="profile--img">
+            <img src={getImage(image)} alt="User avatar" />
           </div>
         )}
-        <div className="profile__nav">
-          <div className="profile__column">
-            <div className="profile__avatar" />
-            <div className="profile__sections">
+        <div className="widget">
+          <div className="widget-area">
+            <div className="widget-info">
               <div className={poemClass} onClick={showPoems}>
                 <span>Poems</span>
                 <span> {user.poems.length}</span>
@@ -107,7 +134,11 @@ class Showcase extends Component {
                 <span> {user.following.length}</span>
               </div>
             </div>
-            <div className="profile__button m-3">
+            <div className="widget-name">
+              <h4>{user.name}</h4>
+              <span>{user.email}</span>
+            </div>
+            <div className="widget-button">
               {this.followUnFollowButton(
                 user.userId,
                 following,
@@ -116,7 +147,7 @@ class Showcase extends Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

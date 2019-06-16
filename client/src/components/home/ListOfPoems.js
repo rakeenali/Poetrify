@@ -33,9 +33,9 @@ class ListOfPoems extends Component {
     if (poemIds.length > 0) {
       return (
         <React.Fragment>
-          <div className="container">
+          <div className="container u-lg-space">
             <div className="row">
-              <div className="col-lg-2 col-md-2" />
+              <div class="col-lg-1 col-md-1">&nbsp;</div>
               <>
                 {stop ? (
                   <ManyPoem poemIds={poemIds} noSeeMore={true} sort={true} />
@@ -47,7 +47,7 @@ class ListOfPoems extends Component {
                   />
                 )}
               </>
-              <div className="col-lg-2 col-md-2" />
+              <div class="col-lg-1 col-md-1">&nbsp;</div>
             </div>
           </div>
         </React.Fragment>

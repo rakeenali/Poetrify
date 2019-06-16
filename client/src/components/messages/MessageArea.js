@@ -2,54 +2,55 @@ import React, { Component, Fragment } from "react";
 import isEmpty from "lodash/isEmpty";
 import moment from "moment";
 import { connect } from "react-redux";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
+import classname from "classnames";
 
 import Spinner from "../layouts/Loading";
 
-import TextareaForm from "../layouts/TextareaForm";
-
 import { sendMessage } from "../../actions/userMessages";
 
-import "./MessageArea.css";
-
-const MessageFormValidation = Yup.object().shape({
-  messageText: Yup.string()
-    .max(500, "Message field should contain less than 500 characters")
-    .required("Message Field is required")
-});
-
 class MessageArea extends Component {
+  state = {
+    messageText: "",
+    error: false
+  };
   // Render Functions
   renderMessages = () => {
     const { record, userId } = this.props;
-    console.log(record);
-    return record.messages.map(message => {
+    const last = record.messages.length - 1;
+    return record.messages.map((message, index) => {
       let mine = false;
       if (message.from.toString() === userId.toString()) {
         mine = true;
       }
+
       return (
-        <div
-          className={
-            mine
-              ? "bg-primary text-right message-slide"
-              : "bg-success message-slide"
-          }
+        <li
+          className={classname({
+            "list mine": mine,
+            "list not-mine": !mine,
+            "last-child": index === last
+          })}
           key={message._id}
         >
-          <h3>{message.message}</h3>
-          <span> {moment.parseZone(message.messagedAt).fromNow()}</span>
-        </div>
+          <p>{message.message}</p>
+          <span className="d-block">
+            {" "}
+            {moment.parseZone(message.messagedAt).fromNow()}
+          </span>
+        </li>
       );
     });
   };
 
   // Form function
-  sendMessage = (userId, values) => {
-    const { messageText } = values;
+  sendMessage = userId => {
+    const { messageText } = this.state;
+    if (messageText.trim() === "") {
+      this.setState({ error: true });
+      return;
+    }
     this.props.sendMessage(messageText, userId);
-    values.messageText = "";
+    this.setState({ messageText: "" });
   };
 
   render() {
@@ -60,23 +61,23 @@ class MessageArea extends Component {
 
     return (
       <Fragment>
-        {this.renderMessages()}
-        <Formik
-          initialValues={{ messageText: "" }}
-          onSubmit={values => this.sendMessage(record.with._id, values)}
-          validationSchema={MessageFormValidation}
-        >
-          <Form>
-            <TextareaForm
-              name="messageText"
-              label="Write a message"
-              placeholder={`Reply to ${record.with.name}`}
-            />
-            <button type="submit" className="btn btn-lg btn-primary">
-              Send Message
-            </button>
-          </Form>
-        </Formik>
+        <div className="top">
+          <h3 className="text-center text-primary">{record.with.name}</h3>
+        </div>
+        <div className="bottom">
+          <ul className="lists">{this.renderMessages()}</ul>
+        </div>
+        <div className="message">
+          <textarea
+            value={this.state.messageText}
+            className={classname({ error: this.state.error })}
+            rows="5"
+            onChange={e => this.setState({ messageText: e.target.value })}
+          />
+          <button onClick={e => this.sendMessage(record.with._id)}>
+            Send Message
+          </button>
+        </div>
       </Fragment>
     );
   }

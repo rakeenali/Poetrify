@@ -19,14 +19,17 @@ router.get("", authenticate, async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.user._id
-    }).populate("user");
+    })
+      .populate("user")
+      .lean()
+      .exec();
 
     if (!profile) {
       errors.message = "User error";
       return genError(res, errors, 400);
     }
 
-    return res.status(200).json(profileJSON(profile, req.get("host")));
+    return res.status(200).json(profileJSON(profile));
   } catch (err) {
     return genError(res, err.message);
   }
@@ -66,7 +69,7 @@ router.get("/handle/:handle", async (req, res) => {
     return genError(res, errors);
   }
 
-  return res.status(200).json(profileJSON(profile, req.get("host")));
+  return res.status(200).json(profileJSON(profile));
 });
 
 // @route   POST api/profile

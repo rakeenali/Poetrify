@@ -97,10 +97,14 @@ class Handle extends Component {
             showFollowing
           }}
         />
-        <div className="container">
+        <div className="container u-top-space">
           <div className="row">
-            <Bio profile={profile} />
-            {showPoems && <ManyPoem poemIds={profile.user.poems} />}
+            {showPoems && (
+              <React.Fragment>
+                <Bio profile={profile} />
+                <ManyPoem poemIds={profile.user.poems} />
+              </React.Fragment>
+            )}
             {showFollowedBy && (
               <FollowedBy
                 isAuthenticated={false}

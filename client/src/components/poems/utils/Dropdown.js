@@ -9,15 +9,13 @@ const Dropdown = props => {
 
   if (isAuthenticated && poem.createdBy._id === userId) {
     return (
-      <div className="dropdown align-self-center">
-        <button
-          className="dropdown-toggle toggle-custom btn btn-link"
-          id="poemDropDownMenu"
-          data-toggle="dropdown"
-        />
+      <div className="dropdown ml-auto">
+        <h4 id="poemdropdown" data-toggle="dropdown" className="poem-dropdown">
+          &#x02026;
+        </h4>
         <div
           className="dropdown-menu dropdown-menu-right"
-          aria-labelledby="poemDropDownMenu"
+          aria-labelledby="poemdropdown"
         >
           <Link className="dropdown-item" to={`/update-poem/${poem._id}`}>
             Update Poem
@@ -26,7 +24,7 @@ const Dropdown = props => {
             className="dropdown-item"
             onClick={() => deletePoem(poem._id)}
           >
-            Delete Poem
+            Delete
           </button>
         </div>
       </div>

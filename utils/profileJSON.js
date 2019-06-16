@@ -1,4 +1,4 @@
-module.exports = (profile, host) => {
+module.exports = profile => {
   return {
     firstName: profile.firstName,
     lastName: profile.lastName,
@@ -6,7 +6,7 @@ module.exports = (profile, host) => {
     dateOfBirth: profile.dateOfBirth,
     country: profile.country,
     city: profile.city,
-    profileImage: `http://${host}/${profile.profileImage}`,
+    profileImage: profile.profileImage,
     profileId: profile._id,
     user: {
       userId: profile.user._id,

@@ -1,0 +1,34 @@
+.create-overflow {
+  overflow-y: scroll;
+}
+
+.member {
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.member:hover {
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.member-active {
+  transform: scaleY(0.7);
+}
+
+.member-active h4 {
+  font-size: 0.9rem;
+}
+
+.member > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.member img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  margin-right: 2rem;
+}

@@ -4,6 +4,7 @@ const router = require("express").Router();
 const uuid = require("uuid");
 
 const Profile = require("../../models/Profile");
+const Group = require("../../models/Group");
 
 const authenticate = require("../../middleware/authenticate");
 const genError = require("../../utils/generateError");
@@ -79,6 +80,58 @@ router.post(
         errors.message = "Image cannot be stored";
         return genError(res, errors);
       }
+    } catch (err) {
+      return genError(res, err.message);
+    }
+  }
+);
+
+// @route   POST api/image/group/:groupId
+// @desc    Add image for the group
+// @access  POST
+router.post(
+  "/group/:groupId",
+  authenticate,
+  upload.single("groupImage"),
+  async (req, res) => {
+    try {
+      let errors = {};
+      const { groupId } = req.params;
+      let canAdd = false;
+
+      const group = await Group.findById(groupId)
+        .select("admins")
+        .lean()
+        .exec();
+
+      if (!group) {
+        errors.message = "Image cannot be stored";
+        return genError(res, errors);
+      }
+
+      group.admins.map(adminId => {
+        if (adminId.toString() === req.user._id.toString()) {
+          canAdd = true;
+          return;
+        }
+      });
+
+      if (!canAdd) {
+        errors.message = "Image cannot be stored unauthorized operation";
+        return genError(res, errors);
+      }
+
+      const newGroup = await Group.findByIdAndUpdate(
+        groupId,
+        {
+          groupImage: req.file.path
+        },
+        { new: true }
+      )
+        .lean()
+        .exec();
+
+      return res.status(200).json(newGroup);
     } catch (err) {
       return genError(res, err.message);
     }

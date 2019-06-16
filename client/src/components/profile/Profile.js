@@ -7,12 +7,12 @@ import Showcase from "./utils/Showcase";
 import CreateProfile from "./CreateProfile";
 import ManyPoem from "../poems/poem/ManyPoem";
 import FollowedBy from "../follow/FollowedBy";
+import GroupSidebar from "../group/GroupSidebar";
 
 import withAuth from "../hoc/withAuth";
 
 import { loggedInProfile, clearProfile } from "../../actions/profile";
 
-import "./Profile.css";
 import Following from "../follow/Following";
 
 import Loading from "../layouts/Loading";
@@ -35,7 +35,9 @@ class Profile extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.profile) {
-      this.setState({ loading: false });
+      this.setState({
+        loading: false
+      });
     }
   }
 
@@ -78,7 +80,6 @@ class Profile extends Component {
       addProfile: !prevState.addProfile
     }));
     this.props.loggedInProfile();
-    // this.reRender();
   };
 
   render() {
@@ -119,10 +120,17 @@ class Profile extends Component {
               showFollowing
             }}
           />
-          <div className="container">
+          <div className="container u-top-space">
             <div className="row">
-              <Bio profile={profile} />
-              {showPoems && <ManyPoem poemIds={profile.user.poems} />}
+              {showPoems && (
+                <React.Fragment>
+                  <div className="col-lg-4 col-md-4 col-12">
+                    <Bio profile={profile} />
+                    <GroupSidebar ownProfile={true} />
+                  </div>
+                  <ManyPoem poemIds={profile.user.poems} />
+                </React.Fragment>
+              )}
               {showFollowedBy && (
                 <FollowedBy
                   isAuthenticated={true}
@@ -146,16 +154,17 @@ class Profile extends Component {
     }
 
     return (
-      <div className="container">
+      <div className="container u-lg-space">
         <div className="row">
           <div className="col-12">
             <h1 className="text-primary display-4">
               Profile has not been created yet
             </h1>
           </div>
-          <div className="col-6 mt-3">
+          <div className="col-8" />
+          <div className="col-2 mt-3">
             <button
-              className="btn btn-outline-success btn-block btn-lg"
+              className="btn btn-success btn-block btn-lg"
               onClick={this.changeProfile}
             >
               Create Profile

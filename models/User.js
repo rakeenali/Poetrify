@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 
 const notificationSchema = require("./Notification");
 
@@ -52,6 +51,20 @@ const userSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "User"
+    }
+  ],
+
+  groupsCreated: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Group"
+    }
+  ],
+
+  groupsPartOff: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Group"
     }
   ],
 

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import moment from "moment";
+import classname from "classnames";
 
 import Comments from "../utils/Comments";
 import Likes from "../utils/Likes";
@@ -27,13 +28,15 @@ class ManyPoem extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.poemIds[nextProps.poemIds.length - 1] !==
-      this.state.poemIds[this.state.poemIds.length - 1]
-    ) {
-      const { poemIds } = nextProps;
-      this.setState({ poemIds });
-      nextProps.getManyPoems(poemIds, this.props.sort);
+    if (this.props.sort) {
+      if (
+        nextProps.poemIds[nextProps.poemIds.length - 1] !==
+        this.state.poemIds[this.state.poemIds.length - 1]
+      ) {
+        const { poemIds } = nextProps;
+        this.setState({ poemIds });
+        nextProps.getManyPoems(poemIds, this.props.sort);
+      }
     }
   }
 
@@ -60,51 +63,52 @@ class ManyPoem extends Component {
   renderPoems = (poems, isAuthenticated, userId) => {
     return poems.map(poem => {
       return (
-        <div className="card" key={poem._id}>
-          <div className="card-header">
-            <div className="poem__header">
-              <div>
-                <h5>
-                  <Link to={`/poem/${poem._id}`}>{poem.createdBy.name}</Link>
-                </h5>
-              </div>
-              <div className="poem__header--side">
+        <div className="mb-4" key={poem._id}>
+          <div className="poem">
+            <div className="card">
+              <div className="card-body">
                 <div className="d-flex">
-                  <span className="text-muted mr-2">
-                    {" "}
-                    {moment.parseZone(poem.createdAt).format("DD-MM-YYYY")}
-                  </span>
-                  <span>
-                    <Dropdown
-                      poem={poem}
-                      isAuthenticated={isAuthenticated}
-                      userId={userId}
-                    />
-                  </span>
+                  <h2 className="card-title d-block">
+                    <Link to={`poem/${poem._id}`}>{poem.createdBy.name}</Link>
+                  </h2>
+                  <Dropdown
+                    poem={poem}
+                    isAuthenticated={isAuthenticated}
+                    userId={userId}
+                  />
+                </div>
+                <h6 className="card-subtitle mb-2 text-muted">
+                  {" "}
+                  {moment.parseZone(poem.createdAt).format("DD-MM-YYYY")}
+                </h6>
+                <p className="card-text u-med-para my-2 py-4">
+                  {poem.description}
+                </p>
+                <div className="poem-actions">
+                  <Likes
+                    likesList={poem.likes}
+                    poemId={poem._id}
+                    userId={userId}
+                    isAuthenticated={isAuthenticated}
+                    update={e => this.reRender()}
+                  />
+                  <div
+                    className="d-flex align-content-center align-items-center"
+                    onClick={e => this.setComment(poem._id)}
+                  >
+                    <div className="poem-actions-interact">
+                      <a href="#!">
+                        <span>Comments</span>
+                      </a>
+                    </div>
+                    <div className="poem-actions-count">
+                      <span className="badge badge-pill d-block ml-2">
+                        {poem.comments.length}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="card-body">
-            <p className="lead">{poem.description}</p>
-          </div>
-          <div className="card-footer">
-            <div className="poem__footer">
-              <React.Fragment>
-                <Likes
-                  likesList={poem.likes}
-                  poemId={poem._id}
-                  userId={userId}
-                  isAuthenticated={isAuthenticated}
-                  update={e => this.reRender()}
-                />
-              </React.Fragment>
-              <p onClick={e => this.setComment(poem._id)}>
-                <span className="btn btn-link"> Comments: </span>
-                <span className="badge badge-primary p-2">
-                  {poem.comments.length}
-                </span>
-              </p>
             </div>
           </div>
           {this.state.showComments === poem._id && (
@@ -123,6 +127,10 @@ class ManyPoem extends Component {
 
   render() {
     const { poems, isAuthenticated, userId } = this.props;
+    const classes = classname({
+      "col-lg-8 col-md-8 col-12": !this.props.sort,
+      "col-lg-10 col-md-10 col-12": this.props.sort
+    });
 
     if (this.state.loading) {
       return (
@@ -134,30 +142,24 @@ class ManyPoem extends Component {
 
     if (poems.length > 0) {
       return (
-        <div className="col-lg-8 col-md-8 col-12 mt-2">
+        <div className={classes}>
           {this.renderPoems(poems, isAuthenticated, userId)}
           {this.props.seeMore && (
-            <span onClick={this.props.seeMore}>See More</span>
+            <div className="text-center mb-4">
+              <span
+                className="u-small-para see-more"
+                onClick={this.props.seeMore}
+              >
+                See More
+              </span>
+            </div>
           )}
           {this.props.noSeeMore && <span>Limit Reached</span>}
         </div>
       );
-    } else if (isAuthenticated) {
-      return (
-        <div className="col-8">
-          <h3>Add a poem</h3>
-          <Link className="btn btn-primary" to="/add-poem">
-            Add Poem
-          </Link>
-        </div>
-      );
     }
 
-    return (
-      <div className="col-lg-8 col-md-8 col-12 mt-2">
-        <h3>User has not written any poem yet</h3>
-      </div>
-    );
+    return <div className="col-lg-8 col-md-8 col-12 mt-2" />;
   }
 }
 
@@ -172,4 +174,4 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   { getManyPoems, clearPoems }
-)(ManyPoem);
+)(withRouter(ManyPoem));

@@ -33,7 +33,10 @@ const router = express.Router();
 router.get("/current", authenticate, async (req, res) => {
   const errors = {};
 
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id).populate(
+    "profile",
+    "profileImage"
+  );
 
   if (!user) {
     errors.message = "User error";
@@ -54,7 +57,7 @@ router.post("/users", async (req, res) => {
     const { userIds } = req.body;
     const users = await User.find({
       _id: { $in: userIds }
-    }).populate("profile", "_id handle");
+    }).populate("profile", "_id handle profileImage");
 
     return res.status(200).json(
       users.map(user => ({
@@ -64,7 +67,8 @@ router.post("/users", async (req, res) => {
         followedBy: user.followedBy,
         profile: {
           _id: user.profile._id,
-          handle: user.profile.handle
+          handle: user.profile.handle,
+          profileImage: user.profile.profileImage
         }
       }))
     );
@@ -263,9 +267,15 @@ router.post("/resetpassword", authenticate, async (req, res) => {
       return generateError(res, errors);
     }
 
-    user.password = newPassword;
+    const salt = await bcrypt.genSalt(10);
+    if (!salt) {
+      throw new Error("Change password salting error");
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
     await user.save();
-    return res.status(200).json({ message: "You password has been reset" });
+    return res.status(200).json({ message: "You password has been changed" });
   } catch (e) {
     return generateError(res, e.message);
   }

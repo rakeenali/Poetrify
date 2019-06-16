@@ -144,6 +144,24 @@ export const resetPassword = (
   }
 };
 
+export const changePassword = (oldPassword, newPassword) => async dispatch => {
+  try {
+    const res = await axios.post("/api/user/resetpassword", {
+      oldPassword,
+      newPassword
+    });
+    dispatch({
+      type: SET_NOTIFICATION,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: SET_ERROR,
+      payload: { ...err.response.data }
+    });
+  }
+};
+
 export const logout = () => dispatch => {
   localStorage.removeItem("poetrify");
   window.location.href = "/login";

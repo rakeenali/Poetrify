@@ -53,61 +53,70 @@ class SinglePoem extends Component {
     }
 
     return (
-      <div className="container">
-        <div className="card">
-          <div className="card-header">
-            <div className="d-flex justify-content-between">
-              <h4 className="text-muted">
-                Written By: <strong>{poem.createdBy.name}</strong>
-              </h4>
-              <div className="d-flex">
-                <span className="text-muted mr-2 d-block align-self-center">
-                  {" "}
-                  {moment.parseZone(poem.createdAt).format("DD-MM-YYYY")}
-                </span>
-                <Dropdown
-                  poem={poem}
-                  isAuthenticated={isAuthenticated}
-                  userId={userId}
-                />
+      <div className="container u-lg-space">
+        <div className="row">
+          <div className="col-lg-12 col-md-12 col-12">
+            <div className="poem">
+              <div className="card">
+                <div className="card-body">
+                  <div className="d-flex">
+                    <h2 className="card-title d-block">
+                      {poem.createdBy.name}
+                    </h2>
+                    <Dropdown
+                      poem={poem}
+                      isAuthenticated={isAuthenticated}
+                      userId={userId}
+                    />
+                  </div>
+                  <h6 className="card-subtitle mb-2 text-muted">
+                    {" "}
+                    {moment.parseZone(poem.createdAt).format("DD-MM-YYYY")}
+                  </h6>
+                  <p className="card-text u-med-para my-2 py-4">
+                    {poem.description}
+                  </p>
+                  <div className="poem-actions">
+                    <Likes
+                      likesList={poem.likes}
+                      poemId={poem._id}
+                      userId={userId}
+                      isAuthenticated={isAuthenticated}
+                      update={e => this.reRender()}
+                    />
+                    <div
+                      className="d-flex align-content-center align-items-center"
+                      onClick={e =>
+                        this.setState({
+                          showCommentList: !this.state.showCommentList
+                        })
+                      }
+                    >
+                      <div className="poem-actions-interact">
+                        <a href="#!">
+                          <span>Comments</span>
+                        </a>
+                      </div>
+                      <div className="poem-actions-count">
+                        <span className="badge badge-pill d-block ml-2">
+                          {poem.comments.length}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="card-body">
-            {poem.title && <h4 className="text-center pb-2">{poem.title}</h4>}
-            <p className="lead">{poem.description}</p>
-            <div className="d-flex justify-content-around">
-              <Likes
-                likesList={poem.likes}
+            {showCommentList && (
+              <Comments
+                commentList={poem.comments}
                 poemId={poem._id}
                 userId={userId}
                 isAuthenticated={isAuthenticated}
                 update={e => this.reRender()}
               />
-              <p
-                onClick={e =>
-                  this.setState({
-                    showCommentList: !this.state.showCommentList
-                  })
-                }
-              >
-                <span className="btn btn-link"> Comments: </span>
-                <span className="badge badge-primary p-2">
-                  {poem.comments.length}
-                </span>
-              </p>
-            </div>
+            )}
           </div>
-
-          {showCommentList && (
-            <Comments
-              commentList={poem.comments}
-              poemId={poem._id}
-              userId={userId}
-              isAuthenticated={isAuthenticated}
-              update={e => this.reRender()}
-            />
-          )}
         </div>
       </div>
     );

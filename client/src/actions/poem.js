@@ -4,7 +4,6 @@ import { SET_ERROR, SET_POEM, CLEAR_POEM } from "./types";
 export const addPoem = (description, history) => async dispatch => {
   try {
     const res = await axios.post("/api/poem", { description });
-
     history.push(`/poem/${res.data._id}`);
   } catch (err) {
     dispatch({

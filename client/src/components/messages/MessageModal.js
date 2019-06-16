@@ -107,7 +107,9 @@ class Modal extends Component {
                   rows="7"
                   disabled={disabled}
                 />
-                {error && <div className="invalid-feedback">{error}</div>}
+                {error && (
+                  <div className="invalid-feedback u-small-para">{error}</div>
+                )}
               </div>
               <button
                 className="btn btn-light float-right"

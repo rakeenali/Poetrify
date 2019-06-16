@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 
 import { clearMessageNotification } from "../../actions/manageNotifications";
 
+import MessageIcon from "./msg-icon.png";
+import MessageIconNew from "./msg-icon-notification.png";
+
 class MessageButton extends Component {
   state = {
     newMessage: false
@@ -25,11 +28,28 @@ class MessageButton extends Component {
   render() {
     const { newMessage } = this.state;
 
+    if (newMessage) {
+      return (
+        <li
+          className="nav-item nav-img-container mr-3"
+          onClick={this.messageClicked}
+        >
+          <Link className="nav-link nav-img-link" to="/messages">
+            <img
+              className="nav-img"
+              src={MessageIconNew}
+              alt="new message recieved"
+            />
+            <span className="badge badge-pill nav-img-pill-msg">msg</span>
+          </Link>
+        </li>
+      );
+    }
+
     return (
-      <li className="nav-item ml-2" onClick={this.messageClicked}>
-        <Link className="btn btn-outline-warning" to="/messages">
-          Messages
-          {newMessage && <span className="badge badge-dark">Message</span>}
+      <li className="nav-item nav-img-container mr-2">
+        <Link className="nav-link nav-img-link" to="/messages">
+          <img className="nav-img" src={MessageIcon} alt="message" />
         </Link>
       </li>
     );

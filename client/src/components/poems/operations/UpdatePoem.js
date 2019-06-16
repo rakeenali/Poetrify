@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
+import { Link } from "react-router-dom";
 
 import { getPoemById, updatePoem } from "../../../actions/poem";
 
 import withAuth from "../../hoc/withAuth";
 
-import TextareaForm from "../../layouts/TextareaForm";
 import { PoemFormValidation } from "./validation/PoemValidation";
+import TextAreaForm from "../../layouts/TextareaForm";
 
 class UpdatePoem extends Component {
   state = {
-    description: "",
-    errors: {}
+    description: ""
   };
 
   componentDidMount() {
@@ -38,45 +38,44 @@ class UpdatePoem extends Component {
     const { description } = this.state;
 
     return (
-      <div className="container">
+      <div className="container u-lg-space">
         <div className="row">
-          <div className="col-lg-2" />
-          <div className="col-lg-8">
-            <div className="card text-white bg-secondary">
+          <div className="col-lg-12 col-md-12 col-12">
+            <div className="card">
               <div className="card-header">
                 <h3 className="text-center">
                   {" "}
                   Update poem as: <strong>{user.name}</strong>
                 </h3>
               </div>
-              <div className="card-body color-transparent--less">
-                <Formik
-                  onSubmit={this.onSubmit}
-                  initialValues={{ description }}
-                  enableReinitialize={true}
-                  validationSchema={PoemFormValidation}
-                >
-                  <Form>
-                    <TextareaForm
-                      name="description"
-                      label="About the poem"
-                      placeholder="Poem ..."
-                    />
-
-                    <div className="row">
-                      <div className="col-lg-4" />
-                      <div className="col-lg-4">
-                        <button
-                          className="btn btn-dark btn-lg btn-block"
-                          type="submit"
-                        >
-                          Update Poem
-                        </button>
-                      </div>
-                      <div className="col-lg-4" />
-                    </div>
-                  </Form>
-                </Formik>
+              <div className="card-body">
+                <div className="form-container">
+                  <Formik
+                    onSubmit={this.onSubmit}
+                    initialValues={{ description }}
+                    enableReinitialize={true}
+                    validationSchema={PoemFormValidation}
+                  >
+                    <Form>
+                      <Field
+                        name="description"
+                        label="About the poem"
+                        placeholder="Poem ..."
+                        rows="7"
+                        component={TextAreaForm}
+                      />
+                      <button
+                        type="submit"
+                        className="btn btn-outline-info btn-lg"
+                      >
+                        Update Poem
+                      </button>
+                      <Link className="btn btn-lg btn-link" to="/profile">
+                        Cancel
+                      </Link>
+                    </Form>
+                  </Formik>
+                </div>
               </div>
             </div>
           </div>

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import isEmpty from "lodash/isEmpty";
+import { Link } from "react-router-dom";
+import getImage from "../../utils/getImage";
 
 import { getUsers, clearUsers } from "../../actions/users";
 import { followUser, unFollowUser } from "../../actions/follow";
@@ -35,40 +37,59 @@ class FollowedBy extends Component {
   renderFollowingMe = (followingMe, isAuthenticated) => {
     return followingMe.map(user => {
       return (
-        <div className="profile__follow" key={user._id}>
-          <ul className="list-group">
-            <li className="list-group-item mt-2">
-              <div className="row">
-                <div className="col-4 d-flex flex-column justify-content-center">
-                  <a href={`/profile/${user.profile.handle}`}>
-                    <h4>{user.name}</h4>
-                  </a>
-                  {isAuthenticated && (
-                    <button
-                      className="btn btn-primary btn-md profile__follow--button mt-2"
-                      onClick={e => this.followUser(user._id)}
-                    >
-                      Follow
-                    </button>
-                  )}
+        <div className="col-lg-4 col-md-6 .col-sm-12" key={user._id}>
+          <div className="card--container">
+            <div className="card--follow">
+              <div className="card--side card--side--front">
+                <div className="card--picture">
+                  <img
+                    src={getImage(user.profile.profileImage)}
+                    alt="users avatar"
+                  />
                 </div>
-                <div className="col-8 d-flex flex-column justify-content-around align-items-end">
-                  <span className="profile__follow--text">
-                    Following:{" "}
-                    <span className="badge badge-info">
-                      {user.following.length}
-                    </span>
-                  </span>
-                  <span className="profile__follow--text">
-                    Followers:{" "}
-                    <span className="badge badge-info">
-                      {user.followedBy.length}
-                    </span>
-                  </span>
+                <div className="card--heading">
+                  <h4>{user.name}</h4>
+                </div>
+                <div className="card--details">
+                  <ul className="card--list">
+                    <li className="mb-3">
+                      Followers{" "}
+                      <span className="badge badge-pill card--badge">
+                        {" "}
+                        {user.followedBy.length}
+                      </span>
+                    </li>
+                    <li>
+                      Following{" "}
+                      <span className="badge badge-pill card--badge">
+                        {user.following.length}
+                      </span>
+                    </li>
+                  </ul>
                 </div>
               </div>
-            </li>
-          </ul>
+              <div className="card--side card--side--back card--side--back--img">
+                <div className="card--cta">
+                  <div className="d-flex flex-column justify-content-center align-content-center">
+                    {isAuthenticated && (
+                      <button
+                        className="btn btn-lg card--btn-follow"
+                        onClick={e => this.followUser(user._id)}
+                      >
+                        Follow
+                      </button>
+                    )}
+                    <Link
+                      to={`/profile/${user.profile.handle}`}
+                      className="btn btn-lg card--btn-seemore"
+                    >
+                      See More
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       );
     });
@@ -80,74 +101,112 @@ class FollowedBy extends Component {
       if (isEmpty(result)) {
         // show follow button
         return (
-          <div className="profile__follow" key={user._id}>
-            <ul className="list-group">
-              <li className="list-group-item mt-2">
-                <div className="row">
-                  <div className="col-4 d-flex flex-column justify-content-center">
-                    <a href={`/profile/${user.profile.handle}`}>
-                      <h4>{user.name}</h4>
-                    </a>
-                    <button
-                      className="btn btn-primary btn-md profile__follow--button mt-2"
-                      onClick={e => this.followUser(user._id)}
-                    >
-                      Follow
-                    </button>
+          <div className="col-lg-4 col-md-6 .col-sm-12" key={user._id}>
+            <div className="card--container">
+              <div className="card--follow">
+                <div className="card--side card--side--front">
+                  <div className="card--picture">
+                    <img
+                      src={getImage(user.profile.profileImage)}
+                      alt="users avatar"
+                    />
                   </div>
-                  <div className="col-8 d-flex flex-column justify-content-around align-items-end">
-                    <span className="profile__follow--text">
-                      Following:{" "}
-                      <span className="badge badge-info">
-                        {user.following.length}
-                      </span>
-                    </span>
-                    <span className="profile__follow--text">
-                      Followers:{" "}
-                      <span className="badge badge-info">
-                        {user.followedBy.length}
-                      </span>
-                    </span>
+                  <div className="card--heading">
+                    <h4>{user.name}</h4>
+                  </div>
+                  <div className="card--details">
+                    <ul className="card--list">
+                      <li className="mb-3">
+                        Followers{" "}
+                        <span className="badge badge-pill card--badge">
+                          {" "}
+                          {user.followedBy.length}
+                        </span>
+                      </li>
+                      <li>
+                        Following{" "}
+                        <span className="badge badge-pill card--badge">
+                          {user.following.length}
+                        </span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
-              </li>
-            </ul>
+                <div className="card--side card--side--back card--side--back--img">
+                  <div className="card--cta">
+                    <div className="d-flex flex-column justify-content-center align-content-center">
+                      <button
+                        className="btn btn-lg card--btn-follow"
+                        onClick={e => this.followUser(user._id)}
+                      >
+                        Follow
+                      </button>
+                      <Link
+                        to={`/profile/${user.profile.handle}`}
+                        className="btn btn-lg card--btn-seemore"
+                      >
+                        See More
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         );
       }
       return (
-        <div className="profile__follow" key={user._id}>
-          <ul className="list-group">
-            <li className="list-group-item mt-2">
-              <div className="row">
-                <div className="col-4 d-flex flex-column justify-content-center">
-                  <a href={`/profile/${user.profile.handle}`}>
-                    <h4>{user.name}</h4>
-                  </a>
-                  <button
-                    className="btn btn-primary btn-md profile__follow--button mt-2"
-                    onClick={e => this.unFollowUser(user._id)}
-                  >
-                    Unfollow
-                  </button>
+        <div className="col-lg-4 col-md-6 col-sm-12" key={user._id}>
+          <div className="card--container">
+            <div className="card--follow">
+              <div className="card--side card--side--front">
+                <div className="card--picture">
+                  <img
+                    src={getImage(user.profile.profileImage)}
+                    alt="users avatar"
+                  />
                 </div>
-                <div className="col-8 d-flex flex-column justify-content-around align-items-end">
-                  <span className="profile__follow--text">
-                    Following:{" "}
-                    <span className="badge badge-info">
-                      {user.following.length}
-                    </span>
-                  </span>
-                  <span className="profile__follow--text">
-                    Followers:{" "}
-                    <span className="badge badge-info">
-                      {user.followedBy.length}
-                    </span>
-                  </span>
+                <div className="card--heading">
+                  <h4>{user.name}</h4>
+                </div>
+                <div className="card--details">
+                  <ul className="card--list">
+                    <li className="mb-3">
+                      Followers{" "}
+                      <span className="badge badge-pill card--badge">
+                        {" "}
+                        {user.followedBy.length}
+                      </span>
+                    </li>
+                    <li>
+                      Following{" "}
+                      <span className="badge badge-pill card--badge">
+                        {user.following.length}
+                      </span>
+                    </li>
+                  </ul>
                 </div>
               </div>
-            </li>
-          </ul>
+              <div className="card--side card--side--back card--side--back--img">
+                <div className="card--cta">
+                  <div className="d-flex flex-column justify-content-center align-content-center">
+                    <button
+                      className="btn btn-lg card--btn-follow"
+                      onClick={e => this.unFollowUser(user._id)}
+                    >
+                      Unfollow
+                    </button>
+                    <Link
+                      to={`/profile/${user.profile.handle}`}
+                      className="btn btn-lg card--btn-seemore"
+                    >
+                      See More
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       );
     });
@@ -170,17 +229,17 @@ class FollowedBy extends Component {
 
     if (followingMe.length > 0 && following.length > 0 && isAuthenticated) {
       return (
-        <div className="col-lg-8 col-md-8 col-12">
+        <React.Fragment>
           {this.renderFollowingMeWithButton(followingMe, following)}
-        </div>
+        </React.Fragment>
       );
     }
 
     if (followingMe.length > 0) {
       return (
-        <div className="col-lg-8 col-md-8 col-12">
+        <React.Fragment>
           {this.renderFollowingMe(followingMe, isAuthenticated)}
-        </div>
+        </React.Fragment>
       );
     }
 

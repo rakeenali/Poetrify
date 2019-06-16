@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 
 import { getNotifications } from "../../actions/manageNotifications";
 
+// import BellIcon from "./bell-icon.png";
+import BellIconNotification from "./bell-icon-notification.png";
+
 class NotificationButton extends Component {
   state = {
     showCount: true,
@@ -43,27 +46,53 @@ class NotificationButton extends Component {
 
     if (isEmpty(notifications)) {
       return (
-        <li classame="nav-item">
-          <Link to="/notifications" className="btn btn-outline-secondary">
-            Notifications
+        <li className="nav-item nav-img-container mr-2">
+          <Link className="nav-link nav-img-link" to="/notifications">
+            <img
+              className="nav-img"
+              src={BellIconNotification}
+              alt="bell icon"
+            />
+            <span className="badge badge-pill nav-img-pill-not">0</span>
           </Link>
         </li>
       );
     }
 
-    return (
-      <li
-        className="nav-item"
-        onClick={() => this.setState({ showCount: false })}
-      >
-        <Link to="/notifications" className="btn button-notification">
-          Notifications{" "}
-          {showCount && (
-            <span className="badge badge-dark">{notifications.unseen}</span>
-          )}
-        </Link>
-      </li>
-    );
+    if (showCount) {
+      return (
+        <li
+          className="nav-item nav-img-container mr-3"
+          onClick={() => this.setState({ showCount: false })}
+        >
+          <Link to="/notifications" className="nav-img-link">
+            <img
+              className="nav-img"
+              src={BellIconNotification}
+              alt="bell icon"
+            />
+            {showCount && (
+              <span className="badge badge-pill nav-img-pill-not">
+                {notifications.unseen}
+              </span>
+            )}
+          </Link>
+        </li>
+      );
+    } else if (!showCount) {
+      return (
+        <li className="nav-item nav-img-container mr-2">
+          <Link className="nav-link nav-img-link" to="/notifications">
+            <img
+              className="nav-img"
+              src={BellIconNotification}
+              alt="bell icon"
+            />
+            <span className="badge badge-pill nav-img-pill-not">0</span>
+          </Link>
+        </li>
+      );
+    }
   }
 }
 

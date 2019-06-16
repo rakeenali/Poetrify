@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const http = require("http");
 const socketIO = require("socket.io");
+const helmet = require("helmet");
 // const sticky = require("sticky-session");
 
 const keys = require("./config/keys");
@@ -17,6 +18,8 @@ const images = require("./routes/api/images");
 const notification = require("./routes/api/notification");
 const conversation = require("./routes/api/conversation");
 const recomendationRoute = require("./routes/api/recomendation");
+const groupRoute = require("./routes/api/group");
+const searchRoute = require("./routes/api/search");
 
 const app = express();
 
@@ -55,8 +58,11 @@ app.use("/api/image", images);
 app.use("/api/notification", notification);
 app.use("/api/conversation", conversation);
 app.use("/api/recomendation", recomendationRoute);
+app.use("/api/group", groupRoute);
+app.use("/api/search", searchRoute);
 
 if (process.env.NODE_ENV === "production") {
+  app.use(helmet());
   app.use(express.static("client/build"));
 
   app.get("*", (req, res) => {

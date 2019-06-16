@@ -1,0 +1,64 @@
+.modal-poem {
+  position: relative;
+  width: 50%;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  position: fixed;
+  top: 10vh;
+  left: 5%;
+  z-index: 100;
+  overflow: hidden;
+  padding-bottom: 2rem;
+}
+
+.modal-poem-header {
+  padding: 1rem;
+  background: #00000091;
+  color: white;
+  font-size: 1.4rem;
+}
+
+.modal-poem-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #fff;
+  font-weight: bolder;
+}
+
+.modal-poem-header span {
+  cursor: pointer;
+  font-weight: bolder;
+  transition: all 0.3s;
+}
+
+.modal-poem-header span:hover {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.btn-compose {
+  background-color: #ff5e3a;
+  color: #fff;
+  transition: all 0.3s;
+}
+
+.btn-compose:hover {
+  color: #fff;
+  background-color: #ff5e3ae5;
+}
+
+.form-control-red {
+  border: 1px solid red;
+}
+
+.form-label span {
+  color: red;
+  font-size: 1.1rem;
+  font-weight: lighter;
+}
+
+@media (min-width: 768px) {
+  .modal-poem {
+    width: 50rem;
+    left: calc((100% - 50rem) / 2);
+  }
+}

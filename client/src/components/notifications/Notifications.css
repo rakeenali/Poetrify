@@ -2,6 +2,7 @@
   transition: all 0.5s;
   cursor: pointer;
   margin-bottom: 5px;
+  font-size: 1.2rem;
 }
 
 .notification-item:hover {

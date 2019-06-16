@@ -17,6 +17,12 @@ const poemSchema = new Schema({
     default: Date.now
   },
 
+  fromGroup: {
+    type: Boolean,
+    require: true,
+    default: false
+  },
+
   updatedAt: {
     type: Date
   },

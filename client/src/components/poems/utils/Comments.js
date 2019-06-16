@@ -29,47 +29,74 @@ class Comments extends Component {
     if (!userId) {
       return comments.map(comment => {
         return (
-          <li
-            key={comment._id}
-            className="list-group-item comment__item d-flex justify-content-between"
-          >
-            <span className="d-inline">
-              {comment.description}{" "}
-              <span className="d-block text-muted">
-                {" "}
-                {moment.parseZone(comment.createdAt).format("DD-MM-YYYY")}
-              </span>
-            </span>
-          </li>
+          <div className="comment" key={comment._id}>
+            <div className="card">
+              <div className="card-title comment-main">
+                <div className="d-flex align-items-center align-content-center">
+                  <div className="comment-heading">
+                    <h5>{comment.writtenBy.name}</h5>
+                    <span>{moment.parseZone(comment.createdAt).fromNow()}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="comment-hr-div">
+                <hr className="comment-hr" />
+              </div>
+              <div className="card-text px-3 u-small-para comment-text">
+                <p>{comment.description}</p>
+              </div>
+            </div>
+          </div>
         );
       });
     } else {
       return comments.map(comment => {
         return (
-          <li
-            key={comment._id}
-            className="list-group-item comment__item d-flex justify-content-between"
-          >
-            <span className="d-inline">
-              {comment.description}{" "}
-              <span className="d-block text-muted">
-                {" "}
-                {moment.parseZone(comment.createdAt).format("DD-MM-YYYY")}
-              </span>
-            </span>
-            {comment.writtenBy._id === userId && (
-              <span
-                className="d-inline btn btn-danger btn-sm align-self-center"
-                onClick={e =>
-                  this.props.deleteComment(poemId, comment._id, () =>
-                    this.props.update()
-                  )
-                }
-              >
-                Delete
-              </span>
-            )}
-          </li>
+          <div className="comment" key={comment._id}>
+            <div className="card">
+              <div className="card-title comment-main">
+                <div className="d-flex align-items-center align-content-center">
+                  <div className="comment-heading">
+                    <h5>{comment.writtenBy.name}</h5>
+                    <span>{moment.parseZone(comment.createdAt).fromNow()}</span>
+                  </div>
+                </div>
+                {comment.writtenBy._id === userId && (
+                  <div className="dropdown ml-auto">
+                    <h4
+                      id="commentdropdown"
+                      data-toggle="dropdown"
+                      className="comment-dropdown"
+                    >
+                      &#x02026;
+                    </h4>
+                    <div
+                      className="dropdown-menu dropdown-menu-right"
+                      aria-labelledby="commentdropdown"
+                    >
+                      <a
+                        className="dropdown-item"
+                        href="#!"
+                        onClick={e =>
+                          this.props.deleteComment(poemId, comment._id, () =>
+                            this.props.update()
+                          )
+                        }
+                      >
+                        Delete
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="comment-hr-div">
+                <hr className="comment-hr" />
+              </div>
+              <div className="card-text px-3  comment-text">
+                <p className="u-small-para">{comment.description}</p>
+              </div>
+            </div>
+          </div>
         );
       });
     }
@@ -79,7 +106,7 @@ class Comments extends Component {
     return (
       <>
         {comments.length > 0 && (
-          <ul className="list-group">{this.renderCommentList(comments)}</ul>
+          <React.Fragment>{this.renderCommentList(comments)}</React.Fragment>
         )}
       </>
     );
@@ -114,9 +141,9 @@ class Comments extends Component {
           </button>
         </div>
         {comments.length > 0 && (
-          <ul className="list-group">
+          <React.Fragment>
             {this.renderCommentList(comments, poemId, userId)}
-          </ul>
+          </React.Fragment>
         )}
       </React.Fragment>
     );

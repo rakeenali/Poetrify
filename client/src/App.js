@@ -9,8 +9,6 @@ import { Provider } from "react-redux";
 import jwt_decode from "jsonwebtoken/decode";
 import axios from "axios";
 
-import "./App.css";
-
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/register_login";
@@ -23,7 +21,6 @@ import Confirmation from "./components/registration-login/Confirmation";
 import Login from "./components/registration-login/Login";
 import ResetPassword from "./components/registration-login/ResetPassword";
 import Profile from "./components/profile/Profile";
-import AddPoem from "./components/poems/operations/AddPoem";
 import UpdatePoem from "./components/poems/operations/UpdatePoem";
 import SinglePoem from "./components/poems/poem/SinglePoem";
 import Handle from "./components/handle/Handle";
@@ -31,6 +28,9 @@ import NotFound from "./components/error/NotFound";
 import Notifications from "./components/notifications/Notifications";
 import ListOfPoems from "./components/home/ListOfPoems";
 import Message from "./components/messages/Message";
+import ChangePassword from "./components/registration-login/ChangePassword";
+import Settings from "./components/settings/Settings";
+import SingleGroup from "./components/group/SingleGroup";
 
 if (localStorage.getItem("poetrify")) {
   const decoded = jwt_decode(localStorage.getItem("poetrify"));
@@ -46,7 +46,9 @@ if (localStorage.getItem("poetrify")) {
   }
 }
 
-window.axios = axios;
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  window.axios = axios;
+}
 
 class App extends Component {
   render() {
@@ -56,7 +58,7 @@ class App extends Component {
         <Router>
           <React.Fragment>
             <Navbar />
-            <div id="main-area">
+            <React.Fragment>
               <Switch>
                 {isAuthenticated ? (
                   <Redirect exact from="/" to="/poems" />
@@ -72,16 +74,22 @@ class App extends Component {
                 />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/reset/:token" component={ResetPassword} />
-                <Route exact path="/add-poem" component={AddPoem} />
+                <Route
+                  exact
+                  path="/change-password"
+                  component={ChangePassword}
+                />
                 <Route exact path="/update-poem/:id" component={UpdatePoem} />
                 <Route exact path="/poem/:id" component={SinglePoem} />
                 <Route exact path="/profile" component={Profile} />
                 <Route exact path="/profile/:handle" component={Handle} />
+                <Route exact path="/settings" component={Settings} />
                 <Route exact path="/notifications" component={Notifications} />
                 <Route path="/messages" component={Message} />
+                <Route path="/group/:_id" component={SingleGroup} />
                 <Route path="*" component={NotFound} />
               </Switch>
-            </div>
+            </React.Fragment>
           </React.Fragment>
         </Router>
       </Provider>

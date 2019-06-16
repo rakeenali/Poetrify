@@ -18,10 +18,23 @@ function Likes(props) {
   // if user is not autenticated just show likes count
   if (!isAuthenticated) {
     return (
-      <p>
-        <span className="btn btn-link btn-disabled">Like: </span>
-        <span className="badge badge-primary p-2">{likesList.length}</span>
-      </p>
+      // <p>
+      //   <span className="btn btn-link btn-disabled">Like: </span>
+      //   <span className="badge badge-primary p-2">{likesList.length}</span>
+      // </p>
+      <div className="d-flex align-content-center align-items-center liked">
+        <div className="poem-actions-interact">
+          <button type="button">
+            <span className="icon">&star;</span>
+            <span>Likes</span>
+          </button>
+        </div>
+        <div className="poem-actions-count align-self-end">
+          <span className="badge badge-pill d-block ml-2">
+            {likesList.length}
+          </span>
+        </div>
+      </div>
     );
   }
 
@@ -38,23 +51,45 @@ function Likes(props) {
 
     if (liked) {
       return (
-        <p onClick={e => removeLike(poemId, () => update())}>
-          <span className="btn btn-link">Unlike: </span>
-          <span className="badge badge-primary p-2">{likesList.length}</span>
-        </p>
+        <div
+          className="d-flex align-content-center align-items-center liked"
+          onClick={e => removeLike(poemId, () => update())}
+        >
+          <div className="poem-actions-interact">
+            <a href="#!">
+              <span className="icon">&#x02605;</span>
+              <span>Unlike</span>
+            </a>
+          </div>
+          <div className="poem-actions-count align-self-end">
+            <span className="badge badge-pill d-block ml-2">
+              {likesList.length}
+            </span>
+          </div>
+        </div>
       );
     } else {
       return (
-        <p
+        <div
+          className="d-flex align-content-center align-items-center"
           onClick={e =>
             addLike(poemId, () => {
               update();
             })
           }
         >
-          <span className="btn btn-link">Like: </span>
-          <span className="badge badge-primary p-2">{likesList.length}</span>
-        </p>
+          <div className="poem-actions-interact">
+            <a href="#!">
+              <span className="icon">&#x02606;</span>
+              <span>Like</span>
+            </a>
+          </div>
+          <div className="poem-actions-count align-self-end">
+            <span className="badge badge-pill d-block ml-2">
+              {likesList.length}
+            </span>
+          </div>
+        </div>
       );
     }
   }

@@ -34,5 +34,9 @@ export const joinNotification = () => {
     store.dispatch(getMessages());
   });
 
+  socket.on("newGroupRequest", () => {
+    store.dispatch(getNotifications());
+  });
+
   return;
 };

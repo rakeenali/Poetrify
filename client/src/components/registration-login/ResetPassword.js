@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 
 import withoutAuth from "../hoc/withoutAuth";
 import { resetPassword } from "../../actions/register_login";
@@ -45,54 +45,58 @@ class ResetPassword extends Component {
 
     if (token) {
       return (
-        <div className="container">
+        <div className="container u-lg-space">
           <div className="row">
-            <div className="col-lg-2" />
-            <div className="col-lg-8">
-              <div className="card bg-primary text-white">
+            <div className="col-lg-2 col-md-2 hide-on-small" />
+            <div className="col-lg-8 col-md-8 col-12">
+              <div className="card text-dark bg-light card-shadow">
                 <div className="card-header">
                   <h3 className="text-center">Reset Password</h3>
                 </div>
-                <div className="card-body color-transparent">
+                <div className="card-body">
                   {errors.message && (
                     <Alert type="danger" message={errors.message} />
                   )}
-                  <Formik
-                    onSubmit={this.onSubmit}
-                    initialValues={{ password: "", confirmPassword: "" }}
-                    validationSchema={ResetPasswordFormValidation}
-                  >
-                    <Form>
-                      <InputForm
-                        label="Enter New Password"
-                        type="password"
-                        name="password"
-                        placeholder="New Password"
-                      />
-                      <InputForm
-                        label="Confirm Password"
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm Passwrod"
-                      />
-                      <button
-                        type="submit"
-                        className="btn btn-lg btn-dark mt-2"
-                      >
-                        Reset Password
-                      </button>
-                    </Form>
-                  </Formik>
+                  <div className="form-container">
+                    <Formik
+                      onSubmit={this.onSubmit}
+                      initialValues={{ password: "", confirmPassword: "" }}
+                      validationSchema={ResetPasswordFormValidation}
+                    >
+                      <Form>
+                        <Field
+                          label="Enter New Password"
+                          type="password"
+                          name="password"
+                          placeholder="New Password"
+                          component={InputForm}
+                        />
+                        <Field
+                          label="Confirm Password"
+                          type="password"
+                          name="confirmPassword"
+                          placeholder="Confirm Passwrod"
+                          component={InputForm}
+                        />
+                        <button
+                          type="submit"
+                          className="btn btn-outline-info btn-lg mt-2"
+                        >
+                          Reset Password
+                        </button>
+                      </Form>
+                    </Formik>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="col-lg-2" />
+            <div className="col-lg-2 col-md-2 hide-on-small" />
           </div>
         </div>
       );
     }
     return (
-      <div>
+      <div className="container u-lg-space">
         <p>waiting for token</p>
       </div>
     );

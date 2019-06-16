@@ -4,21 +4,24 @@ import moment from "moment";
 export default function Bio(props) {
   const { profile } = props;
 
+  const years = moment.parseZone(profile.dateOfBirth).format("YYYY-MM-DD");
   return (
-    <div className="col-lg-4 col-md-4 col-12">
-      <div className="profile__info p-3">
-        <h3>
-          {profile.firstName} {profile.lastName}
-        </h3>
-        <span className="text-muted d-block pb-2 text-md">{`@${
-          profile.handle
-        }`}</span>
-        <span className="text-muted d-block pb-2 text-md">
-          {profile.country} {profile.city}
-        </span>
-        <span className="text-muted d-block pb-2 text-md">
-          Born {moment.parseZone(profile.dateOfBirth).format("DD-MM-YYYY")}
-        </span>
+    <div className="showcase">
+      <div className="card">
+        <div className="card-header">
+          <h4>
+            {profile.firstName} {profile.lastName}
+          </h4>
+          <div className="showcase-age">
+            <strong>Age:</strong> {moment().diff(years, "years")}
+          </div>
+        </div>
+        <div className="card-body">
+          <p className="card-text u-small-para">{`@${profile.handle}`}</p>
+          <p className="card-text u-small-para">
+            {profile.country}, {profile.city}
+          </p>
+        </div>
       </div>
     </div>
   );

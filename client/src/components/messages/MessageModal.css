@@ -12,8 +12,9 @@
 
 .modal__header {
   padding: 1rem;
-  background: #5101d1;
+  background: #7014ffd9;
   color: white;
+  font-size: 1.4rem;
 }
 
 .modal__header h1 {
@@ -35,6 +36,10 @@
   display: flex;
   justify-content: flex-start;
   padding: 1rem;
+}
+
+.modal__item {
+  font-size: 1.1rem;
 }
 
 .modal__item:hover {

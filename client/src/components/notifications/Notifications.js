@@ -54,7 +54,7 @@ class Notifications extends Component {
     }
 
     return (
-      <div className="container">
+      <div className="container u-lg-space">
         <div className="row">
           <div className="col-md-2" />
           <div className="col-md-8">

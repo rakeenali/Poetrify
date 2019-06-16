@@ -1,32 +1,49 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { Field, ErrorMessage } from "formik";
+import classname from "classnames";
 
 const InputForm = props => {
-  const { type, name, placeholder, label } = props;
+  const { field, form, type, placeholder, label } = props;
+  const { name } = field;
+  const { touched, errors, isValid } = form;
+
+  const inputClass = classname({
+    "form-control form-control-input form-control-success":
+      touched[field.name] && isValid,
+    "form-control form-control-input form-control-red":
+      touched[field.name] && errors[field.name],
+    "form-control form-control-input": true
+  });
+
+  const spanClass = classname({
+    "input-group-text text-input-group success-input-group":
+      touched[field.name] && isValid,
+    "input-group-text text-input-group error-input-group":
+      touched[field.name] && errors[field.name],
+    "input-group-text text-input-group": true
+  });
+
   return (
-    <div className="form-group">
-      <label className="form-label--white">{label}</label>
-      <Field
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        className="form-control"
-      />
-      <ErrorMessage name={name}>
-        {msg => {
-          return <span className="text-danger">{msg}</span>;
-        }}
-      </ErrorMessage>
+    <div className="form-group mb-4">
+      <div className="input-group input-group-lg">
+        <div className="input-group-prepend">
+          <span className={spanClass}>{label}</span>
+        </div>
+        <input
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          className={inputClass}
+          {...field}
+          {...props}
+        />
+      </div>
+      {errors[field.name] && touched[field.name] && (
+        <div className="form-label">
+          <span>{errors[field.name]}</span>
+        </div>
+      )}
     </div>
   );
-};
-
-InputForm.propTypes = {
-  type: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired
 };
 
 export default InputForm;

@@ -34,16 +34,16 @@ router.post("/:poemId", authenticate, async (req, res) => {
       { new: true }
     );
 
+    if (!poem) {
+      errors.message = "Poem doesnot exist";
+      return genError(res, errors, 404);
+    }
+
     await User.findByIdAndUpdate(req.user._id, {
       $push: {
         recomendationRecordIds: poem._id
       }
     });
-
-    if (!poem) {
-      errors.message = "Poem doesnot exist";
-      return genError(res, errors, 404);
-    }
 
     return res.status(201).json(poem);
   } catch (e) {

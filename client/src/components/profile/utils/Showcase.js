@@ -1,6 +1,8 @@
 import React from "react";
 import classnames from "classnames";
 
+import getImage from "../../../utils/getImage";
+
 export default props => {
   const {
     image,
@@ -13,31 +15,32 @@ export default props => {
   } = props;
 
   const poemClass = classnames({
-    profile__item: true,
-    "profile__item--current": currentClass.showPoems
+    active: currentClass.showPoems
   });
 
   const followersClass = classnames({
-    profile__item: true,
-    "profile__item--current": currentClass.showFollowedBy
+    active: currentClass.showFollowedBy
   });
 
   const followingClass = classnames({
-    profile__item: true,
-    "profile__item--current": currentClass.showFollowing
+    active: currentClass.showFollowing
+  });
+
+  const profileClass = classnames({
+    profile: true,
+    "profile group-top-space": !image
   });
 
   return (
-    <React.Fragment>
+    <div className={profileClass}>
       {image && (
-        <div className="profile">
-          <img src={image} className="profile--img" alt="Your profile" />
+        <div className="profile--img">
+          <img src={getImage(image)} alt="User avatar" />
         </div>
       )}
-      <div className="profile__nav">
-        <div className="profile__column">
-          <div className="profile__avatar" />
-          <div className="profile__sections">
+      <div className="widget">
+        <div className="widget-area">
+          <div className="widget-info">
             <div className={poemClass} onClick={showPoems}>
               <span>Poems</span>
               <span> {user.poems.length}</span>
@@ -51,16 +54,31 @@ export default props => {
               <span> {user.following.length}</span>
             </div>
           </div>
-          <div className="profile__button m-3">
-            <button
-              className="btn btn-outline-dark btn-block"
-              onClick={e => changeProfile()}
-            >
-              Edit Profile
-            </button>
+          <div className="widget-name">
+            <h4>{user.name}</h4>
+            <span>{user.email}</span>
+          </div>
+          <div className="widget-button">
+            <div className="dropdown">
+              <h4 id="widgetactiondropdown" data-toggle="dropdown">
+                &#x02026;
+              </h4>
+              <div
+                className="dropdown-menu"
+                aria-labelledby="widgetactiondropdown"
+              >
+                <button
+                  className="dropdown-item"
+                  onClick={e => changeProfile()}
+                  type="button"
+                >
+                  Edit Profile
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
