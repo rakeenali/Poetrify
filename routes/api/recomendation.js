@@ -46,15 +46,10 @@ router.get("/", authenticate, async (req, res) => {
     const recomendedPoems = await recomendation.getPoems();
 
     if (!recomendedPoems.canRecomend) {
-      let poems = await Poem.find()
-        .select("_id")
-        .sort({ createdAt: "-1" })
-        .limit(100)
-        .lean()
-        .exec();
+      const poems = await Poem.aggregate([{ $sample: { size: 100 } }]);
 
-      poems = poems.map(({ _id }) => _id.toString());
-      return res.status(200).json({ ids: poems });
+      let ids = poems.map(({ _id }) => _id.toString());
+      return res.status(200).json({ ids });
     } else {
       return res.status(200).json({ ids: recomendedPoems.ids });
     }

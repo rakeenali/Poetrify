@@ -6,6 +6,7 @@ import classnames from "classnames";
 import getImage from "../../utils/getImage";
 
 import { followUser, unFollowUser } from "../../actions/follow";
+import { blockUser } from "../../actions/block";
 
 class Showcase extends Component {
   followUser = userId => {
@@ -14,6 +15,12 @@ class Showcase extends Component {
 
   unFollowUser = userId => {
     this.props.unFollowUser(userId, () => this.props.reRender());
+  };
+
+  blockUser = userId => {
+    this.props.blockUser(userId, () => {
+      window.location.href = "/profile";
+    });
   };
 
   followUnFollowButton = (userId, following, isAuthenticated) => {
@@ -60,6 +67,13 @@ class Showcase extends Component {
             >
               Unfollow
             </button>
+            <button
+              className="dropdown-item"
+              type="button"
+              onClick={e => this.blockUser(userId)}
+            >
+              Block
+            </button>
           </div>
         </div>
       );
@@ -77,6 +91,13 @@ class Showcase extends Component {
             type="button"
           >
             Follow
+          </button>
+          <button
+            className="dropdown-item"
+            type="button"
+            onClick={e => this.blockUser(userId)}
+          >
+            Block
           </button>
         </div>
       </div>
@@ -156,6 +177,7 @@ export default connect(
   null,
   {
     followUser,
-    unFollowUser
+    unFollowUser,
+    blockUser
   }
 )(Showcase);

@@ -5,6 +5,7 @@ import { SET_POEMS, CLEAR_POEMS, SET_ERROR } from "./types";
 export const getManyPoems = (ids, sort = false) => async dispatch => {
   try {
     const res = await axios.post("/api/poem/many", {
+      sort,
       poemIds: ids
     });
 

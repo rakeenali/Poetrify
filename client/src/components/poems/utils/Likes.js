@@ -22,12 +22,12 @@ function Likes(props) {
       //   <span className="btn btn-link btn-disabled">Like: </span>
       //   <span className="badge badge-primary p-2">{likesList.length}</span>
       // </p>
-      <div className="d-flex align-content-center align-items-center liked">
+      <div className="d-flex align-content-center align-items-center">
         <div className="poem-actions-interact">
-          <button type="button">
-            <span className="icon">&star;</span>
+          <a href="#!">
+            <span className="icon">&#x02605;</span>
             <span>Likes</span>
-          </button>
+          </a>
         </div>
         <div className="poem-actions-count align-self-end">
           <span className="badge badge-pill d-block ml-2">

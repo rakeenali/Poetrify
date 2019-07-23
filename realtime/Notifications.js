@@ -120,8 +120,6 @@ module.exports = class Notification {
       },
       { new: true }
     );
-    console.log(user);
-    console.log("new gropup request");
     this.notifcation.to(group.admins[0]).emit("newGroupRequest");
   }
 };

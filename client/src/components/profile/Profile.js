@@ -103,7 +103,6 @@ class Profile extends Component {
         </>
       );
     }
-
     if (!isEmpty(profile)) {
       return (
         <React.Fragment>

@@ -12,7 +12,17 @@ const genError = require("../../utils/generateError");
 // @access  GET
 router.post("/many", async (req, res) => {
   try {
-    const { poemIds } = req.body;
+    const { poemIds, sort } = req.body;
+    if (!sort) {
+      const poems = await Poem.find({
+        _id: { $in: poemIds }
+      })
+        .sort({ createdAt: -1 })
+        .populate("createdBy", "name _id")
+        .populate("comments.writtenBy", "name _id")
+        .populate("likes.likedBy", "name _id");
+      return res.status(200).json(poems);
+    }
     const poems = await Poem.find({
       _id: { $in: poemIds }
     })

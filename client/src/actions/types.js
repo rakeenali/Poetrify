@@ -34,3 +34,6 @@ export const GET_LOGGED_IN_GROUPS = "GET_LOGGED_IN_GROUPS";
 export const GET_SINGLE_GROUP = "GET_SINGLE_GROUP";
 
 export const GET_SEARCH = "GET_SEARCH";
+
+export const SHOW_TOAST = "SHOW_TOAST";
+export const HIDE_TOAST = "HIDE_TOAST";

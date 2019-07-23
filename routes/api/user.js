@@ -117,7 +117,7 @@ router.post("/register", async (req, res) => {
     const url = `http://${host}/confirmation/${emailToken}`;
     transporter.sendMail({
       to: user.email,
-      subject: "Confirm email",
+      subject: "Confirm email From Poetrify",
       html: `Please click this link to confirm your email: <a href=${url}>${url}</a>`
     });
     res
@@ -232,7 +232,6 @@ router.post("/resendtoken", async (req, res) => {
     const emailToken = await jwt.sign({ _id: user._id }, keys.emailSecret, {
       expiresIn: "1d"
     });
-    const host = req.get("host");
     const origin = req.get("origin");
     const url = `${origin}/confirmation/${emailToken}`;
     transporter.sendMail({

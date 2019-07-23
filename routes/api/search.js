@@ -23,19 +23,6 @@ router.get("/", authenticate, async (req, res) => {
       .lean()
       .exec();
 
-    // const userSearch = users.reduce(user => {
-    //   if (user._id.toString() === req.user._id.toString()) {
-    //     return false;
-    //   }
-
-    //   return {
-    //     name: user.name,
-    //     link: `/profile/${user.profile.handle}`,
-    //     image: user.profile.profileImage,
-    //     is: "User"
-    //   };
-    // });
-
     const userSearch = users.reduce((acc, user) => {
       if (user._id.toString() !== req.user._id.toString()) {
         acc.push({

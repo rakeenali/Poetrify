@@ -27,7 +27,7 @@ class AddPoemToGroup extends Component {
       });
       return;
     }
-    if (description.trim().length <= 10 || description.trim().length >= 100) {
+    if (description.trim().length <= 10 || description.trim().length >= 1000) {
       this.setState({
         label: {
           description: "Description field must be between 10 to 100 characters"

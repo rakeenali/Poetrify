@@ -12,6 +12,7 @@ import userNotificationReducer from "./userNotificationReducer";
 import userMessagesReducer from "./userMessagesReducer";
 import groupReducer from "./groupReducer";
 import searchReducer from "./searchReducer";
+import toastNotificationReducer from "./toastNotificationReducer";
 
 export default combineReducers({
   CURRENT_USER: currentUserReducer,
@@ -25,5 +26,6 @@ export default combineReducers({
   USER_NOTIFICATION: userNotificationReducer,
   MESSAGES: userMessagesReducer,
   GROUP: groupReducer,
-  SEARCH: searchReducer
+  SEARCH: searchReducer,
+  TOAST: toastNotificationReducer
 });

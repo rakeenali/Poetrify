@@ -54,6 +54,13 @@ const userSchema = new Schema({
     }
   ],
 
+  blockedUsers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+
   groupsCreated: [
     {
       type: Schema.Types.ObjectId,

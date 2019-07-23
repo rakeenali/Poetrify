@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import moment from "moment";
 import classname from "classnames";
+import isEmpty from "lodash/isEmpty";
 
 import Comments from "../utils/Comments";
 import Likes from "../utils/Likes";
@@ -69,7 +70,7 @@ class ManyPoem extends Component {
               <div className="card-body">
                 <div className="d-flex">
                   <h2 className="card-title d-block">
-                    <Link to={`poem/${poem._id}`}>{poem.createdBy.name}</Link>
+                    <Link to={`/poem/${poem._id}`}>{poem.createdBy.name}</Link>
                   </h2>
                   <Dropdown
                     poem={poem}
@@ -82,7 +83,22 @@ class ManyPoem extends Component {
                   {moment.parseZone(poem.createdAt).format("DD-MM-YYYY")}
                 </h6>
                 <p className="card-text u-med-para my-2 py-4">
-                  {poem.description}
+                  {/* {poem.description.slice(0, 300)}... */}
+                  {/* {poem.description.length} */}
+                  {poem.description.length < 300 ? (
+                    <>{poem.description}</>
+                  ) : (
+                    <>
+                      {poem.description.slice(0, 300)}
+                      <br />
+                      <Link
+                        to={`/poem/${poem._id}`}
+                        style={{ fontWeight: "lighter", fontSize: "1.2rem" }}
+                      >
+                        Continue Reading...
+                      </Link>
+                    </>
+                  )}
                 </p>
                 <div className="poem-actions">
                   <Likes
@@ -140,7 +156,7 @@ class ManyPoem extends Component {
       );
     }
 
-    if (poems.length > 0) {
+    if (!isEmpty(poems)) {
       return (
         <div className={classes}>
           {this.renderPoems(poems, isAuthenticated, userId)}
@@ -157,15 +173,23 @@ class ManyPoem extends Component {
           {this.props.noSeeMore && <span>Limit Reached</span>}
         </div>
       );
+    } else {
+      return <div className="col-lg-8 col-md-8 col-12 mt-2" />;
     }
-
-    return <div className="col-lg-8 col-md-8 col-12 mt-2" />;
   }
 }
 
 const mapStateToProps = state => {
+  let poems = state.POEMS;
+  if (!(state.POEMS instanceof Array) && !isEmpty(poems)) {
+    const newPoems = state.POEMS;
+    poems = [];
+    for (let i in newPoems) {
+      poems.push(newPoems[i]);
+    }
+  }
   return {
-    poems: state.POEMS,
+    poems,
     isAuthenticated: state.CURRENT_USER.isAuthenticated,
     userId: state.CURRENT_USER._id
   };

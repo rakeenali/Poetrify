@@ -26,13 +26,21 @@ class Handle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { error, userId, profile } = nextProps;
+    const { error, userId, profile, blockedUsers } = nextProps;
 
     if (!isEmpty(error)) {
       this.props.history.push("/");
     }
 
     if (!isEmpty(profile) && !isEmpty(userId)) {
+      if (blockedUsers.length > 0) {
+        blockedUsers.forEach(_id => {
+          if (_id.toString() === profile.user.userId.toString()) {
+            this.props.history.push("/profile");
+          }
+        });
+      }
+
       if (profile.user.userId.toString() === userId.toString()) {
         this.props.history.push("/");
       }
@@ -101,7 +109,9 @@ class Handle extends Component {
           <div className="row">
             {showPoems && (
               <React.Fragment>
-                <Bio profile={profile} />
+                <div className="col-lg-4 col-md-4 col-12">
+                  <Bio profile={profile} />
+                </div>
                 <ManyPoem poemIds={profile.user.poems} />
               </React.Fragment>
             )}
@@ -134,7 +144,8 @@ const mapStateToProps = state => {
     userId: state.CURRENT_USER._id,
     error: state.ERROR,
     profile: state.PROFILE,
-    following: state.CURRENT_USER_INFO.following
+    following: state.CURRENT_USER_INFO.following,
+    blockedUsers: state.CURRENT_USER_INFO.blockedUsers
   };
 };
 

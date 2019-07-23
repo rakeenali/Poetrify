@@ -8,6 +8,8 @@ import {
 import { Provider } from "react-redux";
 import jwt_decode from "jsonwebtoken/decode";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
@@ -16,6 +18,7 @@ import { currentUserInfo } from "./actions/currentUserInfo";
 import { joinNotification } from "./actions/user_notification";
 
 import Navbar from "./components/navbar/Navbar";
+import Footer from "./components/footer/Footer";
 import Register from "./components/registration-login/Register";
 import Confirmation from "./components/registration-login/Confirmation";
 import Login from "./components/registration-login/Login";
@@ -31,6 +34,7 @@ import Message from "./components/messages/Message";
 import ChangePassword from "./components/registration-login/ChangePassword";
 import Settings from "./components/settings/Settings";
 import SingleGroup from "./components/group/SingleGroup";
+import ToastMessage from "./components/toast/ToastMessage";
 
 if (localStorage.getItem("poetrify")) {
   const decoded = jwt_decode(localStorage.getItem("poetrify"));
@@ -50,6 +54,15 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
   window.axios = axios;
 }
 
+toast.configure({
+  position: "bottom-right",
+  autoClose: 2000,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true
+});
+
 class App extends Component {
   render() {
     const { isAuthenticated } = store.getState().CURRENT_USER;
@@ -58,6 +71,7 @@ class App extends Component {
         <Router>
           <React.Fragment>
             <Navbar />
+            <ToastMessage />
             <React.Fragment>
               <Switch>
                 {isAuthenticated ? (
@@ -90,6 +104,7 @@ class App extends Component {
                 <Route path="*" component={NotFound} />
               </Switch>
             </React.Fragment>
+            <Footer />
           </React.Fragment>
         </Router>
       </Provider>

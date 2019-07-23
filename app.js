@@ -20,6 +20,7 @@ const conversation = require("./routes/api/conversation");
 const recomendationRoute = require("./routes/api/recomendation");
 const groupRoute = require("./routes/api/group");
 const searchRoute = require("./routes/api/search");
+const blockRoute = require("./routes/api/block");
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use("/api/conversation", conversation);
 app.use("/api/recomendation", recomendationRoute);
 app.use("/api/group", groupRoute);
 app.use("/api/search", searchRoute);
+app.use("/api/block", blockRoute);
 
 if (process.env.NODE_ENV === "production") {
   app.use(helmet());
