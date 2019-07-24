@@ -1,9 +1,14 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 import "./Footer.css";
 
 class Footer extends Component {
   render() {
+    if (this.props.location.pathname === "/messages") {
+      return <></>;
+    }
+
     return (
       <div className="footer">
         <div className="header">
@@ -26,4 +31,4 @@ class Footer extends Component {
   }
 }
 
-export default Footer;
+export default withRouter(Footer);

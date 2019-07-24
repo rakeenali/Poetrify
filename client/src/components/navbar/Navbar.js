@@ -52,6 +52,7 @@ class Navbar extends React.Component {
                   id="search-input"
                   style={{ width: "35vw" }}
                   value={this.state.searchTerm}
+                  autoComplete="off"
                   onChange={e => this.setState({ searchTerm: e.target.value })}
                   className="form-control mr-sm-2"
                   type="text"
