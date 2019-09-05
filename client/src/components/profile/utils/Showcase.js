@@ -56,7 +56,7 @@ export default props => {
           </div>
           <div className="widget-name">
             <h4>{user.name}</h4>
-            <span>{user.email}</span>
+            {/* <span>{user.email}</span> */}
           </div>
           <div className="widget-button">
             <div className="dropdown">

@@ -157,7 +157,7 @@ class Showcase extends Component {
             </div>
             <div className="widget-name">
               <h4>{user.name}</h4>
-              <span>{user.email}</span>
+              {/* <span>{user.email}</span> */}
             </div>
             <div className="widget-button">
               {this.followUnFollowButton(

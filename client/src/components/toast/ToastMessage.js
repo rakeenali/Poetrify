@@ -14,7 +14,7 @@ class ToastMessage extends Component {
       });
       setTimeout(() => {
         nextProps.hideToastMessage();
-      }, 200);
+      }, 500);
     }
   }
 

@@ -22,8 +22,6 @@ class Footer extends Component {
           </div>
           <div>
             <span>Rakeen Ali</span>
-            <span>Asad Khan</span>
-            <span>Ammad Waseem</span>
           </div>
         </div>
       </div>
